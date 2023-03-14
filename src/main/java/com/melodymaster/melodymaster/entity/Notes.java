@@ -2,7 +2,7 @@ package com.melodymaster.melodymaster.entity;
 
 @Entity
 @Table(name = "pitches")
-public class Pitch {
+public class Notes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,9 +14,9 @@ public class Pitch {
     private Integer duration;
     
     // constructors, getters and setters
-    public Pitch() {}
+    public Notes() {}
     
-    public Pitch(Double frequency, Integer duration) {
+    public Notes(Double frequency, Integer duration) {
         this.frequency = frequency;
         this.duration = duration;
     }

@@ -57,14 +57,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
 
-	<!-- Java Sound API -->
-<dependency>
+			<!-- Java Sound API -->
+<!-- <dependency>
     <groupId>javax.sound</groupId>
     <artifactId>javax.sound-api</artifactId>
     <version>1.0.0</version>
-</dependency>
+</dependency> -->
 
 <!-- JavaFX Media API -->
 <dependency>
@@ -86,6 +85,9 @@
     <artifactId>stanford-corenlp</artifactId>
     <version>4.3.0</version>
 </dependency>
+
+	</dependencies>
+
 
 
 	<build>

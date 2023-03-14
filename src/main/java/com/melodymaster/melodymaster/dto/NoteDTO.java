@@ -1,6 +1,6 @@
 package com.melodymaster.melodymaster.dto;
 
-public class PitchDTO {
+public class NoteDTO {
     private Long id;
     private Double frequency;
     private Integer duration;
