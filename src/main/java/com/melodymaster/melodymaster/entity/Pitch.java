@@ -1,0 +1,47 @@
+package com.melodymaster.melodymaster.entity;
+
+@Entity
+@Table(name = "pitches")
+public class Pitch {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "frequency")
+    private Double frequency;
+    
+    @Column(name = "duration")
+    private Integer duration;
+    
+    // constructors, getters and setters
+    public Pitch() {}
+    
+    public Pitch(Double frequency, Integer duration) {
+        this.frequency = frequency;
+        this.duration = duration;
+    }
+    
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public Double getFrequency() {
+        return frequency;
+    }
+    
+    public void setFrequency(Double frequency) {
+        this.frequency = frequency;
+    }
+    
+    public Integer getDuration() {
+        return duration;
+    }
+    
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+}
