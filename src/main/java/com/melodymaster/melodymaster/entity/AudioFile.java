@@ -2,7 +2,7 @@ package com.melodymaster.melodymaster.entity;
 
 @Entity
 @Table(name = "audio_recording")
-public class AudioRecording {
+public class AudioFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +24,10 @@ public class AudioRecording {
     @JoinColumn(name = "user_recording_id")
     private UserRecording userRecording;
 
-    public AudioRecording() {
+    public AudioFile() {
     }
 
-    public AudioRecording(String title, String artist, String genre, String audioUrl, UserRecording userRecording) {
+    public AudioFile(String title, String artist, String genre, String audioUrl, UserRecording userRecording) {
         this.title = title;
         this.artist = artist;
         this.genre = genre;
