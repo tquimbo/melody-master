@@ -59,6 +59,35 @@
 		</dependency>
 	</dependencies>
 
+	<!-- Java Sound API -->
+<dependency>
+    <groupId>javax.sound</groupId>
+    <artifactId>javax.sound-api</artifactId>
+    <version>1.0.0</version>
+</dependency>
+
+<!-- JavaFX Media API -->
+<dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-media</artifactId>
+    <version>17</version>
+</dependency>
+
+<!-- TarsosDSP -->
+<dependency>
+    <groupId>be.tarsos.dsp</groupId>
+    <artifactId>tarsos-dsp</artifactId>
+    <version>6.0.0</version>
+</dependency>
+
+<!-- Stanford CoreNLP -->
+<dependency>
+    <groupId>edu.stanford.nlp</groupId>
+    <artifactId>stanford-corenlp</artifactId>
+    <version>4.3.0</version>
+</dependency>
+
+
 	<build>
 		<plugins>
 			<plugin>
