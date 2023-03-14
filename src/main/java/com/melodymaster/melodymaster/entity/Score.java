@@ -1,21 +1,85 @@
 package com.melodymaster.melodymaster.entity;
 
+import javax.persistence.*;
+
 @Entity
 @Table(name = "scores")
 public class Score {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "user_recording_id")
+    private int userRecordingId;
     
-    @ManyToOne
-    @JoinColumn(name = "song_id", referencedColumnName = "id")
-    private Song song;
+    @Column(name = "song_id")
+    private int songId;
     
-    private int score;
+    @Column(name = "accuracy_score")
+    private double accuracyScore;
     
-    // constructors, getters and setters
+    @Column(name = "timing_score")
+    private double timingScore;
+    
+    @Column(name = "total_score")
+    private double totalScore;
+    
+    public Score() {}
+    
+    public Score(int userRecordingId, int songId, double accuracyScore, double timingScore) {
+        this.userRecordingId = userRecordingId;
+        this.songId = songId;
+        this.accuracyScore = accuracyScore;
+        this.timingScore = timingScore;
+        this.totalScore = (accuracyScore + timingScore) / 2; // Calculate total score as average of accuracy and timing scores
+    }
+    
+    // Getters
+    public int getId() {
+        return id;
+    }
+    
+    public int getUserRecordingId() {
+        return userRecordingId;
+    }
+    
+    public int getSongId() {
+        return songId;
+    }
+    
+    public double getAccuracyScore() {
+        return accuracyScore;
+    }
+    
+    public double getTimingScore() {
+        return timingScore;
+    }
+    
+    public double getTotalScore() {
+        return totalScore;
+    }
+    
+    // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public void setUserRecordingId(int userRecordingId) {
+        this.userRecordingId = userRecordingId;
+    }
+    
+    public void setSongId(int songId) {
+        this.songId = songId;
+    }
+    
+    public void setAccuracyScore(double accuracyScore) {
+        this.accuracyScore = accuracyScore;
+        this.totalScore = (accuracyScore + timingScore) / 2; // Recalculate total score when accuracy score changes
+    }
+    
+    public void setTimingScore(double timingScore) {
+        this.timingScore = timingScore;
+        this.totalScore = (accuracyScore + timingScore) / 2; // Recalculate total score when timing score changes
+    }
 }

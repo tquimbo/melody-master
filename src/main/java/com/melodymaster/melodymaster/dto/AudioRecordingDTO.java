@@ -9,6 +9,65 @@ public class AudioRecordingDto {
     private String audioUrl;
     private Long userRecordingId;
 
-    // constructors, getters and setters
+    public AudioRecordingDto() {
+    }
 
+    public AudioRecordingDto(Long id, String title, String artist, String genre, String audioUrl, Long userRecordingId) {
+        this.id = id;
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.audioUrl = audioUrl;
+        this.userRecordingId = userRecordingId;
+    }
+
+    // getters and setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getAudioUrl() {
+        return audioUrl;
+    }
+
+    public void setAudioUrl(String audioUrl) {
+        this.audioUrl = audioUrl;
+    }
+
+    public Long getUserRecordingId() {
+        return userRecordingId;
+    }
+
+    public void setUserRecordingId(Long userRecordingId) {
+        this.userRecordingId = userRecordingId;
+    }
 }
