@@ -1,4 +1,4 @@
-package com.melodymaster.melodymaster.dto;
+package com.melodymaster.melodymaster.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
