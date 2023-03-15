@@ -1,9 +1,8 @@
 package com.melodymaster.melodymaster.entity;
 
-package com.melodymaster.melodymaster.entity;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import javax.persistence.Entity;
 
 @Entity
 @Table(name = "users")
