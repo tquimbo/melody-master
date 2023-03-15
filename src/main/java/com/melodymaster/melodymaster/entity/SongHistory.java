@@ -1,7 +1,8 @@
 package com.melodymaster.melodymaster.entity;
 @Entity
 @Table(name = "song_history")
-public class SongHistoryEntity {
+
+public class SongHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
