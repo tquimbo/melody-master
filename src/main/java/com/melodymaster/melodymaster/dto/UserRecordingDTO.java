@@ -1,5 +1,7 @@
 package com.melodymaster.melodymaster.dto;
 
+import java.util.Date;
+
 public class UserRecordingDTO {
     private Long id;
     private Long userId;

@@ -1,5 +1,9 @@
 package com.melodymaster.melodymaster.entity;
 
+import javax.persistence.*;
+import java.util.Date;
+
+
 @Entity
 @Table(name = "user_recording")
 public class UserRecording {

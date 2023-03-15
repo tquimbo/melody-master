@@ -1,5 +1,7 @@
 package com.melodymaster.melodymaster.dto;
 
+import java.util.Date;
+
 public class SongHistoryDTO {
     private Long id;
     private Long userId;

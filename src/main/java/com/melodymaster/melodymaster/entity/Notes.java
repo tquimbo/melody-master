@@ -1,7 +1,9 @@
 package com.melodymaster.melodymaster.entity;
 
+import javax.persistence.*;
+
 @Entity
-@Table(name = "pitches")
+@Table(name = "notes")
 public class Notes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

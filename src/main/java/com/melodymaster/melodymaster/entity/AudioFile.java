@@ -1,5 +1,7 @@
 package com.melodymaster.melodymaster.entity;
 
+import javax.persistence.*;
+
 @Entity
 @Table(name = "audio_recording")
 public class AudioFile {

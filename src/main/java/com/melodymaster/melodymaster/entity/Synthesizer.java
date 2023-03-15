@@ -1,5 +1,7 @@
 package com.melodymaster.melodymaster.entity;
 
+import javax.persistence.*;
+
 @Entity
 @Table(name = "synthesizer")
 public class Synthesizer {
