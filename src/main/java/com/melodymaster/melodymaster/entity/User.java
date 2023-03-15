@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +34,10 @@ public class UserEntity {
 
     // constructors, getters and setters
 
-    public UserEntity() {
+    public User() {
     }
 
-    public UserEntity(String firstName, String lastName, String email, String password, LocalDateTime registrationDate, Boolean isPremiumMember) {
+    public User(String firstName, String lastName, String email, String password, LocalDateTime registrationDate, Boolean isPremiumMember) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

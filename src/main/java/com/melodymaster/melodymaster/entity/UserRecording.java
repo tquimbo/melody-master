@@ -2,6 +2,7 @@ package com.melodymaster.melodymaster.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import com.melodymaster.melodymaster.entity.User;
 
 
 @Entity
