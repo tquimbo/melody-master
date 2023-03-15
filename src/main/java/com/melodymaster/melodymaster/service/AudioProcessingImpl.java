@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.melodymaster.melodymaster.repository.NoteRepository;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -13,7 +14,7 @@ import com.melodymaster.melodymaster.dto.NotesDTO;
 
 
 @Service
-public class AudioFileServiceImpl implements AudioFileService {
+public class AudioProcessingImpl implements AudioFileService {
 
   @Autowired
   private NoteRepository noteRepository;
@@ -22,13 +23,13 @@ public class AudioFileServiceImpl implements AudioFileService {
   private static final double PITCH_THRESHOLD = 0.2; // adjust as needed
 
   @Override
-  public List<Note> analyzeFile(File audioFile) throws IOException, UnsupportedAudioFileException {
+  public List<NotesDTO> saveFile(File audioFile) throws IOException, UnsupportedAudioFileException {
     // Analyze the audio file and create a list of Note objects
     List<Note> notes = new ArrayList<>();
     // ...
 
     // Save the list of notes to the database
-    List<NoteEntity> noteEntities = new ArrayList<>();
+    List<Note> noteEntities = new ArrayList<>();
     for (Note note : notes) {
       NoteEntity noteEntity = new NoteEntity();
       noteEntity.setPitch(note.getPitch());

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "notes")
-public class Notes {
+public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,9 +16,9 @@ public class Notes {
     private Integer duration;
     
     // constructors, getters and setters
-    public Notes() {}
+    public Note() {}
     
-    public Notes(Double frequency, Integer duration) {
+    public Note(Double frequency, Integer duration) {
         this.frequency = frequency;
         this.duration = duration;
     }
