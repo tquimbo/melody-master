@@ -14,13 +14,17 @@ public class Note {
     
     @Column(name = "duration")
     private Integer duration;
+
+    @Column(name = "lyrics")
+    private String lyrics;
     
     // constructors, getters and setters
     public Note() {}
     
-    public Note(Double frequency, Integer duration) {
+    public Note(Double frequency, Integer duration, String lyrics) {
         this.pitch = pitch;
         this.duration = duration;
+        this.lyrics = lyrics;
     }
     
     public Long getId() {
@@ -45,5 +49,13 @@ public class Note {
     
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public String getLyrics() {
+        return lyrics;
+    }
+    
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
     }
 }

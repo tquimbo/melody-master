@@ -4,6 +4,7 @@ public class NoteDTO {
     private Long id;
     private Double pitch;
     private Integer duration;
+    private String lyrics;
 
     
     // getters and setters
@@ -29,5 +30,15 @@ public class NoteDTO {
     
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+
+    public String getLyrics() {
+        return lyrics;
+    }
+    
+      
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
     }
 }
