@@ -1,3 +1,5 @@
+package com.melodymaster.melodymaster.repository;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.melodymaster.melodymaster.entity.Notes;
 
