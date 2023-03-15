@@ -1,16 +1,13 @@
+
 package com.melodymaster.melodymaster.service;
 
-public package com.melodymaster.melodymaster.service;
-
-import com.melodymaster.melodymaster.dto.NotesDTO;
+import com.melodymaster.melodymaster.dto.NoteDTO; // Corrected import statement
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public interface AudioFileService  {
-    List<Note> saveFile(File audioFile) throws IOException, UnsupportedAudioFileException
-    getAveragePitch(double[] pitches, int startIndex, int endIndex);
-    List<Note> analyzeFile(File audioFile) throws IOException, UnsupportedAudioFileException
-    String extractLyrics(byte[] audioBytes, int startIndex, int endIndex);
-} 
+public interface AudioProcessingService {
+    List<NoteDTO> saveFile(File audioFile) throws IOException, UnsupportedAudioFileException;
+    // Other methods
+}

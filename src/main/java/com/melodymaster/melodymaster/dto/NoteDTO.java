@@ -1,9 +1,10 @@
 package com.melodymaster.melodymaster.dto;
 
-public class NotesDTO {
+public class NoteDTO {
     private Long id;
-    private Double frequency;
+    private Double pitch;
     private Integer duration;
+
     
     // getters and setters
     public Long getId() {
@@ -14,12 +15,12 @@ public class NotesDTO {
         this.id = id;
     }
     
-    public Double getFrequency() {
-        return frequency;
+    public Double getPitch() {
+        return pitch;
     }
     
-    public void setFrequency(Double frequency) {
-        this.frequency = frequency;
+    public void setPitch(Double pitch) {
+        this.pitch = pitch;
     }
     
     public Integer getDuration() {

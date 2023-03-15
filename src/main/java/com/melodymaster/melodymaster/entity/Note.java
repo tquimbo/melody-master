@@ -9,8 +9,8 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "frequency")
-    private Double frequency;
+    @Column(name = "pitch")
+    private Double pitch;
     
     @Column(name = "duration")
     private Integer duration;
@@ -19,7 +19,7 @@ public class Note {
     public Note() {}
     
     public Note(Double frequency, Integer duration) {
-        this.frequency = frequency;
+        this.pitch = pitch;
         this.duration = duration;
     }
     
@@ -31,12 +31,12 @@ public class Note {
         this.id = id;
     }
     
-    public Double getFrequency() {
-        return frequency;
+    public Double getPitch() {
+        return pitch;
     }
     
-    public void setFrequency(Double frequency) {
-        this.frequency = frequency;
+    public void setPitch(Double pitch) {
+        this.pitch = pitch;
     }
     
     public Integer getDuration() {

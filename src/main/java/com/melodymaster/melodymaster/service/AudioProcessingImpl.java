@@ -7,10 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import com.melodymaster.melodymaster.dto.NotesDTO;
+import com.melodymaster.melodymaster.dto.NoteDTO;
+import com.melodymaster.melodymaster.entity.Note;
+
 
 
 @Service
@@ -22,25 +25,39 @@ public class AudioProcessingImpl implements AudioFileService {
 
   private static final double PITCH_THRESHOLD = 0.2; // adjust as needed
 
-  @Override
-  public List<NotesDTO> saveFile(File audioFile) throws IOException, UnsupportedAudioFileException {
-    // Analyze the audio file and create a list of Note objects
-    List<Note> notes = new ArrayList<>();
-    // ...
+  
+@Override
+public List<NoteDTO> saveFile(File audioFile) throws IOException, UnsupportedAudioFileException {
+  // Analyze the audio file and create a list of Note objects
+  List<Note> notes = new ArrayList<>();
+  // ...
 
-    // Save the list of notes to the database
-    List<Note> noteEntities = new ArrayList<>();
-    for (Note note : notes) {
-      NoteEntity noteEntity = new NoteEntity();
-      noteEntity.setPitch(note.getPitch());
-      noteEntity.setDuration(note.getDuration());
-      noteEntity.setLyrics(note.getLyrics());
-      noteEntities.add(noteEntity);
-    }
-    noteRepository.saveAll(noteEntities);
-
-    return notes;
+  // Convert the list of Note objects to NoteDTO objects
+  List<NoteDTO> noteDTOs = new ArrayList<>();
+  for (Note note : notes) {
+      NoteDTO noteDTO = new NoteDTO();
+      noteDTO.setPitch(note.getPitch());
+      noteDTO.setDuration(note.getDuration());
+      // noteDTO.setLyrics(note.getLyrics());
+      noteDTOs.add(noteDTO);
   }
+
+  // Convert the list of NoteDTO objects to Note entity objects
+  List<Note> noteEntities = noteDTOs.stream().map(this::toEntity).collect(Collectors.toList());
+
+  // Save the list of Note entity objects to the database
+  noteRepository.saveAll(noteEntities);
+
+  return noteDTOs;
+}
+
+
+private Note toEntity(NoteDTO noteDTO) {
+  Note note = new Note();
+  note.setPitch(noteDTO.getPitch());
+  note.setDuration(noteDTO.getDuration());
+  return note;
+}
 
   
   @Override
