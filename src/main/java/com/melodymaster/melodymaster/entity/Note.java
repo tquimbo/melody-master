@@ -12,17 +12,25 @@ public class Note {
     @Column(name = "pitch")
     private Double pitch;
     
+    @Column(name = "start_time")
+    private Double startTime;
+    
+    @Column(name = "end_time")
+    private Double endTime;
+    
     @Column(name = "duration")
-    private Integer duration;
-
+    private Double duration;
+    
     @Column(name = "lyrics")
     private String lyrics;
     
     // constructors, getters and setters
     public Note() {}
     
-    public Note(Double frequency, Integer duration, String lyrics) {
+    public Note(Double pitch, Double startTime, Double endTime, Double duration, String lyrics) {
         this.pitch = pitch;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.duration = duration;
         this.lyrics = lyrics;
     }
@@ -43,14 +51,30 @@ public class Note {
         this.pitch = pitch;
     }
     
-    public Integer getDuration() {
+    public Double getStartTime() {
+        return startTime;
+    }
+    
+    public void setStartTime(Double startTime) {
+        this.startTime = startTime;
+    }
+    
+    public Double getEndTime() {
+        return endTime;
+    }
+    
+    public void setEndTime(Double endTime) {
+        this.endTime = endTime;
+    }
+    
+    public Double getDuration() {
         return duration;
     }
     
-    public void setDuration(Integer duration) {
+    public void setDuration(Double duration) {
         this.duration = duration;
     }
-
+    
     public String getLyrics() {
         return lyrics;
     }
