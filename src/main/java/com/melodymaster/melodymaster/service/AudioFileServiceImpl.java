@@ -2,7 +2,8 @@ import org.springframework.stereotype.Service;
 import com.melodymaster.melodymaster.repository.NoteRepository;
 import java.io.File;
 import java.util.List;
-import com.melodymaster.melodymaster.dto.Note;
+import com.melodymaster.melodymaster.dto.NotesDTO;
+
 
 @Service
 public class AudioFileServiceImpl implements AudioFileService {

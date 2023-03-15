@@ -1,3 +1,17 @@
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.Assert.assertEquals;
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.util.List;
+import com.melodymaster.melodymaster.service.AudioFileService;
+import com.melodymaster.melodymaster.dto.Note;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AudioFileServiceImplTest {
