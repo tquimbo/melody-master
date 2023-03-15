@@ -1,6 +1,6 @@
 package com.melodymaster.melodymaster.dto;
 
-public class SongMetadataDTO {
+public class SongDTO {
     private Long id;
     private String title;
     private String artist;

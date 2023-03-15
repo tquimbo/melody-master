@@ -1,6 +1,6 @@
 package com.melodymaster.melodymaster.dto;
 
-public class Score {
+public class ScoreDTO {
     private int id;
     private int userRecordingId;
     private int songId;
@@ -8,7 +8,7 @@ public class Score {
     private double timingScore;
     private double totalScore;
     
-    public Score(int id, int userRecordingId, int songId, double accuracyScore, double timingScore) {
+    public ScoreDTO(int id, int userRecordingId, int songId, double accuracyScore, double timingScore) {
         this.id = id;
         this.userRecordingId = userRecordingId;
         this.songId = songId;

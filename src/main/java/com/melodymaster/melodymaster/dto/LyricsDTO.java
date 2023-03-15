@@ -1,6 +1,6 @@
 package com.melodymaster.melodymaster.dto;
 
-public class LyricsDto {
+public class LyricsDTO {
     private Long id;
     private String content;
 

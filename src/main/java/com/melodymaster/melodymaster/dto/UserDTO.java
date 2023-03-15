@@ -1,6 +1,8 @@
 package com.melodymaster.melodymaster.dto;
 
-public class UserDto {
+import java.time.LocalDateTime;
+
+public class UserDTO {
 
     private Long id;
     private String username;
@@ -9,22 +11,20 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String profileImage;
-
-    // constructors, getters and setters
-
     private LocalDateTime registrationDate;
     private Boolean isPremiumMember;
 
-    public UserDto() {
+    // constructors, getters and setters
+
+    public UserDTO() {
     }
 
-    public UserDto(Long id, String firstName, String lastName, String email, String password, LocalDateTime registrationDate, Boolean isPremiumMember) {
+    public UserDTO(Long id, String firstName, String lastName, String email, String password, LocalDateTime registrationDate, Boolean isPremiumMember) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.registrationDate = registrationDate;
         this.registrationDate = registrationDate;
         this.isPremiumMember = isPremiumMember;
     }
@@ -85,4 +85,3 @@ public class UserDto {
         this.isPremiumMember = isPremiumMember;
     }
 }
-

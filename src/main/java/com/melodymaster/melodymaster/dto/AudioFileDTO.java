@@ -1,18 +1,19 @@
 package com.melodymaster.melodymaster.dto;
 
-public class AudioRecordingDto {
+public class AudioFileDTO {
 
     private Long id;
     private String title;
     private String artist;
     private String genre;
+
     private String audioUrl;
     private Long userRecordingId;
 
-    public AudioRecordingDto() {
+    public AudioFileDTO() {
     }
 
-    public AudioRecordingDto(Long id, String title, String artist, String genre, String audioUrl, Long userRecordingId) {
+    public AudioFileDTO(Long id, String title, String artist, String genre, String audioUrl, Long userRecordingId) {
         this.id = id;
         this.title = title;
         this.artist = artist;
