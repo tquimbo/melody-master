@@ -10,7 +10,7 @@ public class Note {
     private Long id;
     
     @Column(name = "pitch")
-    private Double pitch;
+    private float pitch;
     
     @Column(name = "start_time")
     private Double startTime;
@@ -27,7 +27,7 @@ public class Note {
     // constructors, getters and setters
     public Note() {}
     
-    public Note(Double pitch, Double startTime, Double endTime, Double duration, String lyrics) {
+    public Note(float pitch, Double startTime, Double endTime, Double duration, String lyrics) {
         this.pitch = pitch;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -43,11 +43,11 @@ public class Note {
         this.id = id;
     }
     
-    public Double getPitch() {
+    public float getPitch() {
         return pitch;
     }
     
-    public void setPitch(Double pitch) {
+    public void setPitch(float pitch) {
         this.pitch = pitch;
     }
     

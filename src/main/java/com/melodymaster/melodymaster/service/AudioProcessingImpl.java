@@ -23,6 +23,7 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
+import be.tarsos.dsp.AudioEvent;
 
 
 import com.melodymaster.melodymaster.dto.NoteDTO;
@@ -89,39 +90,35 @@ public List<Note> analyzeFile(File audioFile) throws UnsupportedAudioFileExcepti
   PitchDetectionHandler pitchDetectionHandler = new PitchDetectionHandler() {
       double timestamp = 0;
 
-      @Override
-      public void handlePitch(PitchDetectionResult pitchDetectionResult) {
-          double timestampIncrement = (double) bufferSize / (double) sampleRate;
-          if (pitchDetectionResult.getPitch() > 0) {
-              if (notes.isEmpty() || timestamp - notes.get(notes.size() - 1).getEndTime() >= 0.2) {
-                  Note note = new Note();
-                  note.setPitch(pitchDetectionResult.getPitch());
-                  note.setStartTime(timestamp);
-                  note.setEndTime(timestamp + timestampIncrement);
-                  notes.add(note);
-              } else {
-                  Note note = notes.get(notes.size() - 1);
-                  note.setPitch((note.getPitch() + pitchDetectionResult.getPitch()) / 2);
-                  note.setEndTime(timestamp + timestampIncrement);
-              }
-          }
-          timestamp += timestampIncrement;
-      }
-  };
+     
+    @Override
+    public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
+        double timestampIncrement = (double) bufferSize / (double) sampleRate;
+        if (pitchDetectionResult.getPitch() > 0) {
+            if (notes.isEmpty() || timestamp - notes.get(notes.size() - 1).getEndTime() >= 0.2) {
+                Note note = new Note();
+                note.setPitch(pitchDetectionResult.getPitch());
+                note.setStartTime(timestamp);
+                note.setEndTime(timestamp + timestampIncrement);
+                notes.add(note);
+            } else {
+                Note note = notes.get(notes.size() - 1);
+                note.setPitch((note.getPitch() + pitchDetectionResult.getPitch()) / 2);
+                note.setEndTime(timestamp + timestampIncrement);
+            }
+        }
+        timestamp += timestampIncrement;
+    }
+};
 
-  AudioDispatcher dispatcher = AudioDispatcherFactory.fromByteArray(audioBytes, sampleRate, bufferSize, overlap);
+  AudioDispatcher dispatcher = AudioDispatcherFactory.fromByteArray(audioBytes, format, bufferSize, overlap);
   dispatcher.addAudioProcessor(new PitchProcessor(pitchEstimationAlgorithm, sampleRate, bufferSize, pitchDetectionHandler));
   dispatcher.run();
 
   return notes;
 }
 
-  AudioDispatcher dispatcher = AudioDispatcherFactory.fromByteArray(audioBytes, sampleRate, bufferSize, overlap);
-  dispatcher.addAudioProcessor(new PitchProcessor(pitchEstimationAlgorithm, sampleRate, bufferSize, pitchDetectionHandler));
-  dispatcher.run();
-
-  return notes;
-}
+ 
 
 // PitchDetectionHandler pitchDetectionHandler = new PitchDetectionHandler() {
 //   double timestamp = 0;
