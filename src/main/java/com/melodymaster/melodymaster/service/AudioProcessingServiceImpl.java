@@ -32,7 +32,7 @@ import com.melodymaster.melodymaster.entity.Note;
 
 
 @Service
-public class AudioProcessingImpl implements AudioProcessingService {
+public class AudioProcessingServiceImpl implements AudioProcessingService {
 
   @Autowired
   private NoteRepository noteRepository;
@@ -63,6 +63,18 @@ public List<NoteDTO> saveFile(File audioFile) throws IOException, UnsupportedAud
   // Save the list of Note entity objects to the database
   noteRepository.saveAll(noteEntities);
 
+  return noteDTOs;
+}
+
+private List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
+  List<NoteDTO> noteDTOs = new ArrayList<>();
+  for (Note note : notes) {
+      NoteDTO noteDTO = new NoteDTO();
+      noteDTO.setPitch(note.getPitch());
+      noteDTO.setDuration(note.getDuration());
+      noteDTO.setLyrics(note.getLyrics());
+      noteDTOs.add(noteDTO);
+  }
   return noteDTOs;
 }
 
@@ -118,82 +130,6 @@ public List<Note> analyzeFile(File audioFile) throws UnsupportedAudioFileExcepti
   return notes;
 }
 
- 
-
-// PitchDetectionHandler pitchDetectionHandler = new PitchDetectionHandler() {
-//   double timestamp = 0;
-
-//   @Override
-//   public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
-//       double timestampIncrement = (double) bufferSize / (double) sampleRate;
-//       if (pitchDetectionResult.getPitch() > 0) {
-//           if (notes.isEmpty() || timestamp - notes.get(notes.size() - 1).getEndTime() >= 0.2) {
-//               Note note = new Note();
-//               note.setPitch(pitchDetectionResult.getPitch());
-//               note.setStartTime(timestamp);
-//               note.setEndTime(timestamp + timestampIncrement);
-//               notes.add(note);
-//           } else {
-//               Note note = notes.get(notes.size() - 1);
-//               note.setPitch((note.getPitch() + pitchDetectionResult.getPitch()) / 2);
-//               note.setEndTime(timestamp + timestampIncrement);
-//           }
-//       }
-//       timestamp += timestampIncrement;
-//   }
-// };
-  
-  // @Override
-  // public List<Note> analyzeFile(File audioFile) throws IOException, UnsupportedAudioFileException {
-  //   List<Note> notes = new ArrayList<>();
-  //   AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-  //   AudioFormat format = audioInputStream.getFormat();
-  //   float sampleRate = format.getSampleRate();
-  //   float frameRate = format.getFrameRate();
-  //   int channels = format.getChannels();
-  //   int sampleSizeInBits = format.getSampleSizeInBits();
-  //   boolean isSigned = format.isSigned();
-  //   boolean isBigEndian = format.isBigEndian();
-  //   byte[] audioBytes = audioInputStream.readAllBytes();
-  //   float[] audioData = AudioFloatConverter.getConverter(format).toFloatArray(audioBytes);
-
-  //   PitchDetector detector = new Yin(sampleRate, audioData.length);
-  //   detector.setThreshold(PITCH_THRESHOLD);
-
-  //   double[] pitches = new double[audioData.length / channels];
-  //   for (int i = 0; i < audioData.length; i += channels) {
-  //     float[] frame = new float[channels];
-  //     for (int j = 0; j < channels; j++) {
-  //       frame[j] = audioData[i + j];
-  //     }
-  //     double pitch = detector.getPitch(frame);
-  //     pitches[i / channels] = pitch;
-  //   }
-
-  //   int noteStart = 0;
-  //   double previousPitch = 0;
-  //   for (int i = 0; i < pitches.length; i++) {
-  //     if (pitches[i] > 0) {
-  //       if (previousPitch == 0) {
-  //         noteStart = i;
-  //       }
-  //     } else {
-  //       if (previousPitch > 0) {
-  //         double pitch = getAveragePitch(pitches, noteStart, i - 1);
-  //         double duration = (i - noteStart) * frameRate / sampleRate;
-  //         String lyrics = extractLyrics(audioBytes, noteStart * channels * sampleSizeInBits / 8, i * channels * sampleSizeInBits / 8);
-  //         Note note = new Note();
-  //         note.setPitch(pitch);
-  //         note.setDuration(duration);
-  //         note.setLyrics(lyrics);
-  //         notes.add(note);
-  //       }
-  //     }
-  //     previousPitch = pitches[i];
-  //   }
-
-  //   return notes;
-  // }
 
   private double getAveragePitch(double[] pitches, int startIndex, int endIndex) {
     double sum = 0;
