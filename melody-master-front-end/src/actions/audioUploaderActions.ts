@@ -1,12 +1,12 @@
 import { Dispatch } from 'redux';
 
-export const processAudio = (file: File) => async (dispatch: Dispatch) => {
+export const uploadAudio = (file: File) => async (dispatch: Dispatch) => {
   const formData = new FormData();
   formData.append('audio', file);
 
   try {
     // Replace this URL with the actual backend API endpoint
-    const response = await fetch('https://your-backend-api.com/process_audio', {
+    const response = await fetch('https://your-backend-api.com/upload_audio', {
       method: 'POST',
       body: formData,
     });
