@@ -33,7 +33,7 @@
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '../store/store';
 
 const NavBar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
