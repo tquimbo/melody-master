@@ -3,6 +3,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.melodymaster.melodymaster.service.AudioProcessingServiceImpl;
 import com.melodymaster.melodymaster.service.AudioProcessingService;
 import org.springframework.http.ResponseEntity;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import org.springframework.http.HttpStatus;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/audio")
@@ -37,6 +40,8 @@ public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFi
         AudioProcessingServiceImpl.analyzeFile(audioFile);
         return ResponseEntity.ok().body("Audio processed successfully");
     } catch (UnsupportedAudioFileException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
+    } catch (IOException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
     }
 }

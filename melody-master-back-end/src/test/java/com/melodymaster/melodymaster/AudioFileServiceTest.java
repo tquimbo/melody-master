@@ -6,6 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +19,7 @@ import java.util.List;
 import com.melodymaster.melodymaster.service.AudioProcessingServiceImpl;
 import com.melodymaster.melodymaster.dto.NoteDTO;
 import com.melodymaster.melodymaster.entity.Note;
+
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -27,14 +32,23 @@ public class AudioFileServiceTest {
     @Autowired
     private AudioProcessingServiceImpl audioProcessingServiceImpl;
 
+    // @Test
+    // public void testAnalyzeFile() throws IOException, UnsupportedAudioFileException {
+    //     File audioFile = new File("test_audio_file.wav");
+    //     List<Note> notes = audioProcessingServiceImpl.analyzeFile(audioFile);
+    //     assertNotNull(notes);
+    //     assertFalse(notes.isEmpty());
+    //     // TODO: add more assertions to validate the output
+    // }
     @Test
-    public void testAnalyzeFile() throws IOException, UnsupportedAudioFileException {
-        File audioFile = new File("test_audio_file.wav");
-        List<Note> notes = audioProcessingServiceImpl.analyzeFile(audioFile);
-        assertNotNull(notes);
-        assertFalse(notes.isEmpty());
-        // TODO: add more assertions to validate the output
-    }
+public void testAnalyzeFile() throws IOException, UnsupportedAudioFileException {
+    Resource resource = new ClassPathResource("test_audio_file.wav");
+    MultipartFile audioFile = new MockMultipartFile("test_audio_file.wav", resource.getInputStream());
+    List<Note> notes = audioProcessingServiceImpl.analyzeFile(audioFile);
+    assertNotNull(notes);
+    assertFalse(notes.isEmpty());
+    // TODO: add more assertions to validate the output
+}
 
   // public void testAnalyzeFile() throws IOException, UnsupportedAudioFileException {
   //   File audioFile = new File("test_audio_file.wav");
