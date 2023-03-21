@@ -2,9 +2,11 @@ package com.melodymaster.melodymaster.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import com.melodymaster.melodymaster.repository.NoteRepository;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,10 +41,11 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
 
 
   private static final double PITCH_THRESHOLD = 0.2; // adjust as needed
+  
 
   
 @Override
-public List<NoteDTO> saveFile(File audioFile) throws IOException, UnsupportedAudioFileException {
+public List<NoteDTO> saveFile(MultipartFile  audioFile) throws IOException, UnsupportedAudioFileException {
   // Analyze the audio file and create a list of Note objects
   List<Note> notes = new ArrayList<>();
   // ...
@@ -66,7 +69,7 @@ public List<NoteDTO> saveFile(File audioFile) throws IOException, UnsupportedAud
   return noteDTOs;
 }
 
-private List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
+public List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
   List<NoteDTO> noteDTOs = new ArrayList<>();
   for (Note note : notes) {
       NoteDTO noteDTO = new NoteDTO();
@@ -79,16 +82,26 @@ private List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
 }
 
 
-private Note toEntity(NoteDTO noteDTO) {
+public Note toEntity(NoteDTO noteDTO) {
   Note note = new Note();
   note.setPitch(noteDTO.getPitch());
   note.setDuration(noteDTO.getDuration());
   return note;
 }
 
-public List<Note> analyzeFile(File audioFile) throws UnsupportedAudioFileException, IOException {
+public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException {
+  
+  // List<Note> notes = new ArrayList<>();
+  // AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+  // AudioFormat format = audioInputStream.getFormat();
+  // int sampleRate = (int) format.getSampleRate();
+  // int sampleSizeInBits = format.getSampleSizeInBits();
+  // int channels = format.getChannels();
+  // boolean isBigEndian = format.isBigEndian();
+  // byte[] audioBytes = audioInputStream.readAllBytes();
   List<Note> notes = new ArrayList<>();
-  AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+  InputStream inputStream = audioFile.getInputStream();
+  AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);
   AudioFormat format = audioInputStream.getFormat();
   int sampleRate = (int) format.getSampleRate();
   int sampleSizeInBits = format.getSampleSizeInBits();
