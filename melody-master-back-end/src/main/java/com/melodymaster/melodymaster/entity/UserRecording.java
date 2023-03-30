@@ -3,6 +3,11 @@ package com.melodymaster.melodymaster.entity;
 import javax.persistence.*;
 import java.util.Date;
 import com.melodymaster.melodymaster.entity.User;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 
 @Entity
