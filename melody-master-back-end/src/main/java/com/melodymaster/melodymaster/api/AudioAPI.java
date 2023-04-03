@@ -6,12 +6,17 @@ import org.springframework.http.ResponseEntity;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import org.springframework.http.HttpStatus;
 import java.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/audio")
 public class AudioAPI {
 
+    @Autowired
+
     private final AudioProcessingServiceImpl AudioProcessingServiceImpl;
+
+    @Autowired
     private final AudioProcessingService AudioProcessingService;
 
 
@@ -33,16 +38,16 @@ public class AudioAPI {
 
 //     return ResponseEntity.ok().body("Audio processed successfully");
 // }
-@PostMapping("/upload")
-public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
-    try {
-        // Call the audioService to process the audio file
-        AudioProcessingServiceImpl.analyzeFile(audioFile);
-        return ResponseEntity.ok().body("Audio processed successfully");
-    } catch (UnsupportedAudioFileException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
-    } catch (IOException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
-    }
-}
+// @PostMapping("/upload")
+// public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
+//     try {
+//         // Call the audioService to process the audio file
+//         AudioProcessingServiceImpl.analyzeFile(audioFile);
+//         return ResponseEntity.ok().body("Audio processed successfully");
+//     } catch (UnsupportedAudioFileException e) {
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
+//     } catch (IOException e) {
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
+//     }
+// }
 }

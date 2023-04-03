@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.melodymaster.melodymaster"})
 @EntityScan("com.melodymaster.melodymaster.entity")
 @EnableJpaRepositories("com.melodymaster.melodymaster.repository")
 public class MelodyMasterApplication {
