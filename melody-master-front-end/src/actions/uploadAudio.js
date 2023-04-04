@@ -105,7 +105,7 @@ const uploadAudio = (file) => async (dispatch) => {
   dispatch({ type: 'UPLOAD_AUDIO_REQUEST' });
 
   try {
-    const response = await fetch('https://your-backend-api.com/upload_audio', {
+    const response = await fetch('http://localhost:8080/api/audio/upload', {
       method: 'POST',
       body: formData,
     });

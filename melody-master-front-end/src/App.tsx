@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import './App.css';
 // import NavBar from './components/NavBar';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import AudioUploader from './components/AudioUploader';
 
 function App() {
@@ -9,20 +10,25 @@ function App() {
       
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
+        <h2>
+          Melody Master
+        </h2>
         <p>
-          Edit <code>src/App.js</code> and save to reload. Hi!
+          Unleash your inner star and master your favorite songs!
         </p>
       {/* <NavBar /> */}
-      <AudioUploader />
-        <a
+      {/* <AudioUploader /> */}
+        {/* <a
           className="App-link"
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
           Learn React
-        </a>
+        </a> */}
+        {/* <AudioUploader /> */}
       </header>
+      
     </div>
   );
 }
