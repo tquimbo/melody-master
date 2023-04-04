@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  color: white;
 }
 
 .App-logo {
@@ -35,4 +36,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.nav-link:visited {
+  background-color: #282c34;
+  color: white;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: white;
 }
