@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 interface NavBarItemProps {
   label: string;
@@ -8,7 +9,7 @@ interface NavBarItemProps {
 }
 
 const NavBarItem: React.FC<NavBarItemProps> = ({ label, path }) => (
-  <Nav.Link href={path}>{label}</Nav.Link>
+  <Nav.Link as={Link} to={path}>{label}</Nav.Link>
 );
 
 const NavBar: React.FC = () => {
