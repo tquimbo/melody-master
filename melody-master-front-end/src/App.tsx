@@ -108,8 +108,6 @@ function App() {
     <BrowserRouter>
       <div className="App" style={{ backgroundColor: '#282c34', height: '100vh'}}>
         <NavBar />
-        {/* <h2>Melody Master</h2>
-        <p>Unleash your inner star and master your favorite songs!</p> */}
         <HomePage />
         <Routes>
           <Route path="/submit" element={<AudioUploader />} />

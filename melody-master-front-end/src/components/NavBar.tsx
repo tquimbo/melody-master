@@ -63,7 +63,7 @@ const NavBarItem: React.FC<NavBarItemProps> = ({ label, path }) => (
 // };
 const NavBar: React.FC = () => {
   return (
-    <Navbar className="navbar-dark" expand="lg" style={{ backgroundColor: '#282c34', justifyContent: 'center' }}>
+    <Navbar className="navbar-dark" expand="lg" style={{ backgroundColor: '#282c34', justifyContent: 'center', top: '50px', left: 0, right: 0, zIndex: 999 }}>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mx-auto" style={{ justifyContent: 'center' }}>
