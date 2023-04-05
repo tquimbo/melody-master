@@ -106,4 +106,3 @@ const AudioUploader = () => {
 
 export default AudioUploader;
 
-export {};
