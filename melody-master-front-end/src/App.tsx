@@ -111,6 +111,7 @@ function App() {
         <HomePage />
         <Routes>
           <Route path="/submit" element={<AudioUploader />} />
+          <Route path="/home" element={<HomePage />} />
         </Routes>
       </div>
     </BrowserRouter>

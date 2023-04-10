@@ -14,6 +14,7 @@ public class MelodyMasterApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MelodyMasterApplication.class, args);
+        
     }
 
 }
