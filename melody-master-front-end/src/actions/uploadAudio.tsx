@@ -1,3 +1,45 @@
+// uploadAudio.ts
+import { Dispatch } from 'redux';
+
+interface UploadAudioRequestAction {
+  type: 'UPLOAD_AUDIO_REQUEST';
+}
+
+interface UploadAudioSuccessAction {
+  type: 'UPLOAD_AUDIO_SUCCESS';
+  payload: any;
+}
+
+interface UploadAudioFailureAction {
+  type: 'UPLOAD_AUDIO_FAILURE';
+  payload: string;
+}
+
+type UploadAudioAction = UploadAudioRequestAction | UploadAudioSuccessAction | UploadAudioFailureAction;
+
+const uploadAudio = (file: File) => async (dispatch: Dispatch<UploadAudioAction>) => {
+  const formData = new FormData();
+  formData.append('audio', file);
+
+  dispatch({ type: 'UPLOAD_AUDIO_REQUEST' });
+
+  try {
+    const response = await fetch('http://localhost:8080/api/audio/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    if (response.ok) {
+      const data = await response.json();
+      dispatch({ type: 'UPLOAD_AUDIO_SUCCESS', payload: data });
+    } else {
+      throw new Error('Upload failed');
+    }
+  } catch (error) {
+    dispatch({ type: 'UPLOAD_AUDIO_FAILURE', payload: (error as Error).message });
+  }
+};
+
+export { uploadAudio };
 // import { Dispatch } from 'redux';
 
 // export const uploadAudio = (file: File) => async (dispatch: Dispatch) => {
@@ -94,31 +136,31 @@
 //   }
 // };
 
-import { Dispatch } from 'redux';
-import { isExpressionWithTypeArguments } from 'typescript';
+// import { Dispatch } from 'redux';
+// import { isExpressionWithTypeArguments } from 'typescript';
 
 
-const uploadAudio = (file) => async (dispatch) => {
-  const formData = new FormData();
-  formData.append('audio', file);
+// const uploadAudio = (file) => async (dispatch) => {
+//   const formData = new FormData();
+//   formData.append('audio', file);
 
-  dispatch({ type: 'UPLOAD_AUDIO_REQUEST' });
+//   dispatch({ type: 'UPLOAD_AUDIO_REQUEST' });
 
-  try {
-    const response = await fetch('http://localhost:8080/api/audio/upload', {
-      method: 'POST',
-      body: formData,
-    });
-    if (response.ok) {
-      const data = await response.json();
-      dispatch({ type: 'UPLOAD_AUDIO_SUCCESS', payload: data });
-    } else {
-      throw new Error('Upload failed');
-    }
-  } catch (error) {
-    dispatch({ type: 'UPLOAD_AUDIO_FAILURE', payload: error.message });
-    throw error;
-  }
-};
+//   try {
+//     const response = await fetch('http://localhost:8080/api/audio/upload', {
+//       method: 'POST',
+//       body: formData,
+//     });
+//     if (response.ok) {
+//       const data = await response.json();
+//       dispatch({ type: 'UPLOAD_AUDIO_SUCCESS', payload: data });
+//     } else {
+//       throw new Error('Upload failed');
+//     }
+//   } catch (error) {
+//     dispatch({ type: 'UPLOAD_AUDIO_FAILURE', payload: error.message });
+//     throw error;
+//   }
+// };
 
-export { uploadAudio };
+// export { uploadAudio };

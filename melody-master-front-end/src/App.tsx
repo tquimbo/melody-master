@@ -102,6 +102,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import AudioUploader from './components/AudioUploader';
 import HomePage from './components/HomePage';
+import UserProfile from './containers/UserProfile';
+import store from './store/store';
 
 function App() {
   return (
@@ -112,6 +114,7 @@ function App() {
         <Routes>
           <Route path="/submit" element={<AudioUploader />} />
           <Route path="/home" element={<HomePage />} />
+          {/* <Route path="/user_profile" element={<UserProfile />} /> */}
         </Routes>
       </div>
     </BrowserRouter>
