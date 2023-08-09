@@ -19,12 +19,13 @@ type UploadAudioAction = UploadAudioRequestAction | UploadAudioSuccessAction | U
 
 const uploadAudio = (file: File) => async (dispatch: Dispatch<UploadAudioAction>) => {
   const formData = new FormData();
-  formData.append('audio', file);
+  formData.append('file', file);
 
   dispatch({ type: 'UPLOAD_AUDIO_REQUEST' });
 
   try {
-    const response = await fetch('http://localhost:8080/api/audio/upload', {
+    //const response = await fetch('http://localhost:8080/api/audio/upload',
+    const response = await fetch('http://localhost:8080/upload', {
       method: 'POST',
       body: formData,
     });
