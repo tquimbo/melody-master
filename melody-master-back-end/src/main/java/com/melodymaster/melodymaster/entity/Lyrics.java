@@ -10,9 +10,15 @@ import javax.persistence.GenerationType;
 @Entity
 @Table(name = "lyrics")
 public class Lyrics {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "song_id")
+    private Song song;
+    
 
     @Column(name = "content")
     private String content;
@@ -34,4 +40,5 @@ public class Lyrics {
     public void setContent(String content) {
         this.content = content;
     }
+    
 }

@@ -23,6 +23,23 @@ public class Song {
     
     private String genre;
 
+
+    @ManyToOne
+    @JoinColumn(name = "user_recording_id")
+    private UserRecording userRecording;
+
+    @ManyToOne
+    @JoinColumn(name = "note_id")
+    private Note note;
+
+
+    @ManyToOne
+    @JoinColumn(name = "lyrics_id")
+    private Lyric lyric;
+
+
+    
+
     public Song() {}
     
     public Song(String title, String artist, String album, Integer year, String genre) {

@@ -16,6 +16,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.UnsupportedSongException;
 // import be.tarsos.dsp.AudioFloatConverter;
 // import be.tarsos.dsp.pitch.PitchDetector;
 // import be.tarsos.dsp.pitch.Yin;
@@ -45,7 +46,7 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
 
   
 @Override
-public List<NoteDTO> saveFile(MultipartFile  audioFile) throws IOException, UnsupportedAudioFileException {
+public List<NoteDTO> saveFile(MultipartFile  Song) throws IOException, UnsupportedSongException {
   // Analyze the audio file and create a list of Note objects
   List<Note> notes = new ArrayList<>();
   // ...
@@ -89,7 +90,7 @@ public Note toEntity(NoteDTO noteDTO) {
   return note;
 }
 
-public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException {
+public List<Note> analyzeFile(MultipartFile Song) throws UnsupportedSongException, IOException {
   
   // List<Note> notes = new ArrayList<>();
   // AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
@@ -100,7 +101,8 @@ public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFi
   // boolean isBigEndian = format.isBigEndian();
   // byte[] audioBytes = audioInputStream.readAllBytes();
   List<Note> notes = new ArrayList<>();
-  InputStream inputStream = audioFile.getInputStream();
+  //InputStream inputStream = audioFile.getInputStream();
+   InputStream inputStream = Song.getInputStream();
   AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);
   AudioFormat format = audioInputStream.getFormat();
   int sampleRate = (int) format.getSampleRate();

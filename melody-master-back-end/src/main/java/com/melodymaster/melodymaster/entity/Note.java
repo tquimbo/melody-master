@@ -28,6 +28,11 @@ public class Note {
     
     @Column(name = "lyrics")
     private String lyrics;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "song_id")
+    private Song song;
+    
     
     // constructors, getters and setters
     public Note() {}
