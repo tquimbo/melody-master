@@ -17,13 +17,13 @@ public class UserRecording {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "user_id")
+    // private User user;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "song_id")
-    private Song song;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "song_id")
+    // private Song song;
     
     @Column(name = "recording_date")
     private Date recordingDate;

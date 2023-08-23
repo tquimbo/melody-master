@@ -24,18 +24,18 @@ public class Song {
     private String genre;
 
 
-    @ManyToOne
-    @JoinColumn(name = "user_recording_id")
-    private UserRecording userRecording;
+    // @ManyToOne
+    // @JoinColumn(name = "user_recording_id")
+    // private UserRecording userRecording;
 
-    @ManyToOne
-    @JoinColumn(name = "note_id")
-    private Note note;
+    // @ManyToOne
+    // @JoinColumn(name = "note_id")
+    // private Note note;
 
 
-    @ManyToOne
-    @JoinColumn(name = "lyrics_id")
-    private Lyric lyric;
+    // @ManyToOne
+    // @JoinColumn(name = "lyrics_id")
+    // private Lyrics lyric;
 
 
     
