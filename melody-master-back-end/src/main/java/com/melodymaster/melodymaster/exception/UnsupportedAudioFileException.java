@@ -11,8 +11,8 @@
 // }
 package com.melodymaster.melodymaster.exception;
 
-public class UnsupportedFileException extends Exception {
-    public UnsupportedFileException(String message) {
+public class UnsupportedAudioFileException extends Exception {
+    public UnsupportedAudioFileException(String message) {
         super(message);
     }
 }
