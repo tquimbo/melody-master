@@ -21,6 +21,8 @@ package com.melodymaster.melodymaster.service;
 import com.melodymaster.melodymaster.dto.NoteDTO;
 import org.springframework.web.multipart.MultipartFile;
 import com.melodymaster.melodymaster.entity.Note;
+import com.melodymaster.melodymaster.exception.UnsupportedFileException;
+
 import java.io.IOException;
 import java.util.List;
 import javax.sound.sampled.UnsupportedAudioFileException;

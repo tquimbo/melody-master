@@ -10,12 +10,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.melodymaster.melodymaster.exception.UnsupportedFileException;
+
 
 // import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedFileException;
+// import javax.sound.sampled.UnsupportedFileException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+
 
 
 // import be.tarsos.dsp.AudioFloatConverter;
@@ -47,10 +52,11 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
 
   
 @Override
-public List<NoteDTO> saveFile(MultipartFile  audioFile) throws IOException, UnsupportedFileException {
+public List<NoteDTO> saveFile(MultipartFile  audioFile) throws IOException, UnsupportedAudioFileException {
   // Analyze the audio file and create a list of Note objects
   List<Note> notes = new ArrayList<>();
   // ...
+  
 
   // Convert the list of Note objects to NoteDTO objects
   List<NoteDTO> noteDTOs = new ArrayList<>();
@@ -91,7 +97,7 @@ public Note toEntity(NoteDTO noteDTO) {
   return note;
 }
 
-public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedFileException, IOException {
+public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException {
   
   // List<Note> notes = new ArrayList<>();
   // AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
