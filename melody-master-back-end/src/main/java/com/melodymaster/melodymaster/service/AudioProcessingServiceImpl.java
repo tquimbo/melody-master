@@ -11,11 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
+// import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.UnsupportedFileException;
+
 
 // import be.tarsos.dsp.AudioFloatConverter;
 // import be.tarsos.dsp.pitch.PitchDetector;
@@ -90,7 +91,7 @@ public Note toEntity(NoteDTO noteDTO) {
   return note;
 }
 
-public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException {
+public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedFileException, IOException {
   
   // List<Note> notes = new ArrayList<>();
   // AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);

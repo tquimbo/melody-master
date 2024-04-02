@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import com.melodymaster.melodymaster.entity.User;
 
 
 @Entity
@@ -34,13 +35,16 @@ public class UserRecording {
     // Constructors
     public UserRecording() {}
     
+    private User user;
+    private Song song;
+
     public UserRecording(User user, Song song, Date recordingDate, String recordingUrl) {
         this.user = user;
         this.song = song;
         this.recordingDate = recordingDate;
         this.recordingUrl = recordingUrl;
     }
-    
+
     // Getters and setters
     public Long getId() {
         return id;

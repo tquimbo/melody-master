@@ -1,4 +1,5 @@
-package com.melodymaster.melodymaster.service;
+// package com.melodymaster.melodymaster.service;
+package com.melodymaster.melodymaster.exception;
 
 public class UnsupportedFileException extends Exception {
 

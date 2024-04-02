@@ -29,7 +29,7 @@ public class AudioFile {
 
     // @ManyToOne
     // @JoinColumn(name = "user_recording_id")
-    // private UserRecording userRecording;
+    private UserRecording userRecording;
     @ManyToOne
     @JoinColumn(name = "note_id")
     private Note note;
