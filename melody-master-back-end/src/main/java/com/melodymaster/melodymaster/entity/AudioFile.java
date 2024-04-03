@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 @Entity
-@Table(name = "audio_recording")
+@Table(name = "audio_file")
 public class AudioFile {
 
     @Id
