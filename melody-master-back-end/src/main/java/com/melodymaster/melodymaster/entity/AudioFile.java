@@ -27,8 +27,8 @@ public class AudioFile {
     @Column(name = "audio_url")
     private String audioUrl;
 
-    // @ManyToOne
-    // @JoinColumn(name = "user_recording_id")
+    @ManyToOne
+    @JoinColumn(name = "user_recording_id")
     private UserRecording userRecording;
     @ManyToOne
     @JoinColumn(name = "note_id")

@@ -192,6 +192,7 @@
 </repositories> 
  -->
 	<build>
+        <!-- <sourceDirectory>src/main/java</sourceDirectory> -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -209,6 +210,7 @@
             <resources>
         <resource>
             <directory>src/main/java</directory>
+            <!-- <directory>melody-master/melody-master-back-end/target/classes/com/melodymaster/melodymaster</directory> -->
             <includes>
                 <include>**/*.java</include>
             </includes>

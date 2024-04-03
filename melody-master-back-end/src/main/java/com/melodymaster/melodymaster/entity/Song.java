@@ -5,6 +5,8 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 
 @Entity
 public class Song {
@@ -20,22 +22,20 @@ public class Song {
     private String album;
     
     private Integer year;
-    
+
     private String genre;
 
+    @ManyToOne
+    @JoinColumn(name = "user_recording_id")
+    private UserRecording userRecording;
 
-    // @ManyToOne
-    // @JoinColumn(name = "user_recording_id")
-    // private UserRecording userRecording;
+    @ManyToOne
+    @JoinColumn(name = "note_id")
+    private Note note;
 
-    // @ManyToOne
-    // @JoinColumn(name = "note_id")
-    // private Note note;
-
-
-    // @ManyToOne
-    // @JoinColumn(name = "lyrics_id")
-    // private Lyrics lyric;
+    @ManyToOne
+    @JoinColumn(name = "lyrics_id")
+    private Lyrics lyric;
 
 
     

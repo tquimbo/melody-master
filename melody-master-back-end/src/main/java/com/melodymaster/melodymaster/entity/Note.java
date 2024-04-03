@@ -29,9 +29,9 @@ public class Note {
     @Column(name = "lyrics")
     private String lyrics;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "song_id")
-    // private Song song;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "song_id")
+    private Song song;
 
     @ManyToOne
     @JoinColumn(name = "audio_file_id")
