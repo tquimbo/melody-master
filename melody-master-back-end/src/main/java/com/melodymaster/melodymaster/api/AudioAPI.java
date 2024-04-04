@@ -9,10 +9,10 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import org.springframework.http.HttpStatus;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/audio")
+@CrossOrigin
 public class AudioAPI {
 
     private final AudioProcessingService audioProcessingService; // Changed variable name to lowercase
