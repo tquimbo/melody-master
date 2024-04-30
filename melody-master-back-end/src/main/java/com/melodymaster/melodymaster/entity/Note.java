@@ -29,11 +29,7 @@ public class Note {
     // @JoinColumn(name = "song_id")
     // private Song song;
 
-     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "song_id")
-    private Song song;
-
-     @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "song_id")
     private Song song;
 
@@ -91,6 +87,8 @@ public class Note {
         return duration;
     }
     
+    private String lyrics;
+    
     public void setDuration(Double duration) {
         this.duration = duration;
     }
@@ -103,7 +101,7 @@ public class Note {
         this.lyrics = lyrics;
     }
 
-      public Song getSong() {
+    public Song getSong() {
         return song;
     }
 

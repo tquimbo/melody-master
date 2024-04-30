@@ -97,6 +97,8 @@ public class AudioFile {
         this.audioUrl = audioUrl;
     }
 
+    private Song song;
+
     public UserRecording getUserRecording() {
         return userRecording;
     }
@@ -105,7 +107,7 @@ public class AudioFile {
         this.userRecording = userRecording;
     }
 
-     public Song getSong() {
+    public Song getSong() {
         return song;
     }
 

@@ -27,12 +27,12 @@ public class SongHistory {
 
     @OneToOne
     @JoinColumn(name = "score_id")
-    private Score score;
+    private double score;
 
 
     public SongHistory() {}
 
-    public SongHistory(Long userId, Long songId, Date playedAt, Double score) {
+    public SongHistory(Long userId, Long songId, Date playedAt, double score) {
         this.userId = userId;
         this.songId = songId;
         this.playedAt = playedAt;
@@ -77,7 +77,7 @@ public class SongHistory {
         this.playedAt = playedAt;
     }
 
-    public void setScore(Double score) {
+    public void setScore(int score) {
         this.score = score;
     }
 }
