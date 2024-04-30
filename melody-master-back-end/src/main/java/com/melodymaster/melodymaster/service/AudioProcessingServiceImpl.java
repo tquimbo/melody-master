@@ -270,7 +270,7 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
     @Autowired
     private NoteRepository noteRepository;
 
-      @Override
+    @Override
     public void convertMp3ToWav(String sourcePath, String destPath) throws JavaLayerException {
         Converter converter = new Converter();
         converter.convert(sourcePath, destPath);
