@@ -77,22 +77,37 @@ public class AudioAPI {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
-        logger.info("Received audio file: {}", audioFile.getOriginalFilename());
-        try {
-            logger.debug("Starting to process the audio file.");
-            audioProcessingService.analyzeFile(audioFile);
-            logger.info("Audio file processed successfully.");
-            return ResponseEntity.ok().body("Audio processed successfully");
-        } catch (UnsupportedAudioFileException e) {
-            logger.error("Unsupported audio file error", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: Unsupported file type.");
-        } catch (IOException e) {
-            logger.error("I/O error while processing audio", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: I/O error.");
-        } catch (Exception e) {
-            logger.error("General error while processing audio", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
-        }
+public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
+    logger.info("Received audio file: {}", audioFile.getOriginalFilename());
+    try {
+        logger.debug("Starting to process the audio file.");
+        List<NoteDTO> noteDTOs = audioProcessingService.saveFile(audioFile);
+        logger.info("Audio file processed successfully with {} notes", noteDTOs.size());
+        return ResponseEntity.ok().body("Audio processed successfully: " + noteDTOs.size() + " notes processed.");
+    } catch (UnsupportedAudioFileException | IOException e) {
+        logger.error("Error processing audio file", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
+    } catch (Exception e) {
+        logger.error("Unexpected error during audio processing", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error: " + e.getMessage());
     }
+}
+    // public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
+    //     logger.info("Received audio file: {}", audioFile.getOriginalFilename());
+    //     try {
+    //         logger.debug("Starting to process the audio file.");
+    //         audioProcessingService.analyzeFile(audioFile);
+    //         logger.info("Audio file processed successfully.");
+    //         return ResponseEntity.ok().body("Audio processed successfully");
+    //     } catch (UnsupportedAudioFileException e) {
+    //         logger.error("Unsupported audio file error", e);
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: Unsupported file type.");
+    //     } catch (IOException e) {
+    //         logger.error("I/O error while processing audio", e);
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: I/O error.");
+    //     } catch (Exception e) {
+    //         logger.error("General error while processing audio", e);
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
+    //     }
+    // }
 }
