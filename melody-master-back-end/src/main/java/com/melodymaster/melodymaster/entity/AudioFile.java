@@ -1,11 +1,6 @@
 package com.melodymaster.melodymaster.entity;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "audio_file")
@@ -14,6 +9,10 @@ public class AudioFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "song_id")
+    private Song song;
 
     @Column(name = "title")
     private String title;
@@ -26,6 +25,7 @@ public class AudioFile {
 
     @Column(name = "audio_url")
     private String audioUrl;
+
 
     // @ManyToOne
     // @JoinColumn(name = "user_recording_id")
@@ -97,7 +97,7 @@ public class AudioFile {
         this.audioUrl = audioUrl;
     }
 
-    private Song song;
+  
 
     public UserRecording getUserRecording() {
         return userRecording;

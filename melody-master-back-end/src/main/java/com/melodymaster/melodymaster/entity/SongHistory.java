@@ -7,6 +7,7 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+// import com.melodymaster.melodymaster.entity.ScoreEntity;
 
 @Entity
 @Table(name = "song_history")
@@ -25,19 +26,20 @@ public class SongHistory {
     @Column(name = "played_at")
     private Date playedAt;
 
-    @OneToOne
-    @JoinColumn(name = "score_id")
-    private double score;
+    // @OneToOne
+    // @JoinColumn(name = "score_id") // Assuming there's a separate entity for score
+    // private ScoreEntity score;
+
 
 
     public SongHistory() {}
 
-    public SongHistory(Long userId, Long songId, Date playedAt, double score) {
-        this.userId = userId;
-        this.songId = songId;
-        this.playedAt = playedAt;
-        this.score = score;
-    }
+    // public SongHistory(Long userId, Long songId, Date playedAt, double score) {
+    //     this.userId = userId;
+    //     this.songId = songId;
+    //     // this.playedAt = playedAt;
+    //     // this.score = score;
+    // }
 
     // Getters
     public Long getId() {
@@ -56,9 +58,9 @@ public class SongHistory {
         return playedAt;
     }
 
-    public Double getScore() {
-        return score;
-    }
+    // public Double getScore() {
+    //     return score;
+    // }
 
     // Setters
     public void setId(Long id) {
@@ -77,7 +79,7 @@ public class SongHistory {
         this.playedAt = playedAt;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+    // public void setScore(int score) {
+    //     this.score = score;
+    // }
 }
