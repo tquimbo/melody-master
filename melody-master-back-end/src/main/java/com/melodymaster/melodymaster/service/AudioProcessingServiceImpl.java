@@ -260,12 +260,21 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.AudioEvent;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.converter.Converter;
+
 
 @Service
 public class AudioProcessingServiceImpl implements AudioProcessingService {
 
     @Autowired
     private NoteRepository noteRepository;
+
+      @Override
+    public void convertMp3ToWav(String sourcePath, String destPath) throws JavaLayerException {
+        Converter converter = new Converter();
+        converter.convert(sourcePath, destPath);
+    }
 
     @Override
     public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
