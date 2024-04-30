@@ -15,15 +15,17 @@ public class Lyrics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "song_id")
+    // private Song song;
+    @OneToOne
     @JoinColumn(name = "song_id")
     private Song song;
 
-    @ManyToOne
-    @JoinColumn(name = "audio_file_id")
-    private AudioFile audio_file;
 
-    
+    // @ManyToOne
+    // @JoinColumn(name = "audio_file_id")
+    // private AudioFile audio_file;
 
     @Column(name = "content")
     private String content;
@@ -44,6 +46,15 @@ public class Lyrics {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+
+    public Song getSong() {
+        return song;
+    }
+
+    public void setSong(Song song) {
+        this.song = song;
     }
     
 }

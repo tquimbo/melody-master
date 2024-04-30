@@ -1,11 +1,6 @@
 package com.melodymaster.melodymaster.entity;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "notes")
@@ -26,29 +21,39 @@ public class Note {
     @Column(name = "duration")
     private Double duration;
     
-    @Column(name = "lyrics")
-    private String lyrics;
+    
+    // @OneToOne(fetch = FetchType.LAZY)
+    // private String lyrics;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "song_id")
+    // private Song song;
+
+     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "song_id")
     private Song song;
 
-    @ManyToOne
-    @JoinColumn(name = "audio_file_id")
-    private AudioFile audio_file;
+     @ManyToOne
+    @JoinColumn(name = "song_id")
+    private Song song;
 
-    
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "audio_file_id")
+    // private AudioFile audio_file;
+
+
+
     
     // constructors, getters and setters
     public Note() {}
     
-    public Note(float pitch, Double startTime, Double endTime, Double duration, String lyrics) {
-        this.pitch = pitch;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.duration = duration;
-        this.lyrics = lyrics;
-    }
+    // public Note(float pitch, Double startTime, Double endTime, Double duration, String lyrics) {
+    //     this.pitch = pitch;
+    //     this.startTime = startTime;
+    //     this.endTime = endTime;
+    //     this.duration = duration;
+    //     this.lyrics = lyrics;
+    // }
     
     public Long getId() {
         return id;
@@ -97,4 +102,13 @@ public class Note {
     public void setLyrics(String lyrics) {
         this.lyrics = lyrics;
     }
+
+      public Song getSong() {
+        return song;
+    }
+
+    public void setSong(Song song) {
+        this.song = song;
+    }
+
 }

@@ -245,6 +245,7 @@ package com.melodymaster.melodymaster.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.melodymaster.melodymaster.repository.NoteRepository;
 import com.melodymaster.melodymaster.entity.Note;
@@ -273,6 +274,7 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
     @Autowired
     private NoteRepository noteRepository;
 
+    @Transactional
     @Override
     public void convertMp3ToWav(String sourcePath, String destPath) throws JavaLayerException {
         logger.info("Converting MP3 to WAV: {} to {}", sourcePath, destPath);
@@ -281,6 +283,7 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
         logger.info("Conversion complete.");
     }
 
+    @Transactional
     @Override
     public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
         logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
@@ -299,6 +302,7 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
         return noteDTOs;
     }
 
+    @Transactional
     @Override
     public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException {
         logger.info("Analyzing audio file...");
@@ -330,31 +334,70 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
         return notes;
     }
 
-    @Override
-    public List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
-        logger.info("Converting notes to DTOs...");
-        List<NoteDTO> dtos = notes.stream()
-                                  .map(note -> new NoteDTO(note.getPitch(), note.getDuration(), 0, note.getLyrics()))
-                                  .collect(Collectors.toList());
-        logger.info("Conversion to DTOs complete. Total DTOs created: {}", dtos.size());
-        return dtos;
-    }
+    // @Override
+    // public List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
+    //     logger.info("Converting notes to DTOs...");
+    //     List<NoteDTO> dtos = notes.stream()
+    //                               .map(note -> new NoteDTO(note.getPitch(), note.getDuration(), 0, note.getLyrics()))
+    //                               .collect(Collectors.toList());
+    //     logger.info("Conversion to DTOs complete. Total DTOs created: {}", dtos.size());
+    //     return dtos;
+    // }
 
     @Override
-    public Note toEntity(NoteDTO noteDTO) {
-        Note note = new Note();
-        note.setPitch(noteDTO.getPitch());
-        note.setDuration(noteDTO.getDuration());
-        note.setLyrics(noteDTO.getLyrics());
-        logger.info("Converted DTO to entity: Pitch = {}, Duration = {}", note.getPitch(), note.getDuration());
-        return note;
+    @Transactional
+public List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
+    logger.info("Converting notes to DTOs...");
+    List<NoteDTO> dtos = notes.stream()
+                              .map(note -> {
+                                  Double duration = note.getDuration();
+                                  if (duration == null) {
+                                      // handle the case where duration is null
+                                      // for example, you can set a default value
+                                      duration = 0.0;
+                                  }
+                                  return new NoteDTO(note.getPitch(), duration, 0, note.getLyrics());
+                              })
+                              .collect(Collectors.toList());
+    logger.info("Conversion to DTOs complete. Total DTOs created: {}", dtos.size());
+    return dtos;
+}
+
+@Transactional
+ @Override
+public Note toEntity(NoteDTO noteDTO) {
+    Note note = new Note();
+    note.setPitch(noteDTO.getPitch());
+    note.setDuration(noteDTO.getDuration());
+    note.setLyrics(noteDTO.getLyrics());
+
+    Double duration = note.getDuration();
+    if (duration != null) {
+        double durationValue = duration.doubleValue();
+        // use durationValue
+    } else {
+        // handle the case where duration is null
     }
+
+    logger.info("Converted DTO to entity: Pitch = {}, Duration = {}", note.getPitch(), note.getDuration());
+    return note;
 }
 
 
-// @Service
-// public class AudioProcessingServiceImpl implements AudioProcessingService {
 
+    // @Override
+    // public Note toEntity(NoteDTO noteDTO) {
+    //     Note note = new Note();
+    //     note.setPitch(noteDTO.getPitch());
+    //     note.setDuration(noteDTO.getDuration());
+    //     note.setLyrics(noteDTO.getLyrics());
+    //     logger.info("Converted DTO to entity: Pitch = {}, Duration = {}", note.getPitch(), note.getDuration());
+    //     return note;
+    // }
+}
+
+
+    // handle the case where duration is null
 //     @Autowired
 //     private NoteRepository noteRepository;
 

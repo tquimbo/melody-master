@@ -31,6 +31,16 @@ public class UserRecording {
     
     @Column(name = "recording_url")
     private String recordingUrl;
+
+    @OneToOne
+    @JoinColumn(name = "audio_file_id")
+    private AudioFile audioFile;
+
+    @OneToOne
+    @JoinColumn(name = "score_id")
+    private Score score;
+
+
     
     // Constructors
     public UserRecording() {}

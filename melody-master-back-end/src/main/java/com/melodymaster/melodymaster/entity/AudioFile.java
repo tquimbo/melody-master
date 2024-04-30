@@ -27,28 +27,33 @@ public class AudioFile {
     @Column(name = "audio_url")
     private String audioUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "user_recording_id")
+    // @ManyToOne
+    // @JoinColumn(name = "user_recording_id")
+    // private UserRecording userRecording;
+
+    @OneToOne(mappedBy = "audioFile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserRecording userRecording;
-    @ManyToOne
-    @JoinColumn(name = "note_id")
-    private Note note;
 
 
-    @ManyToOne
-    @JoinColumn(name = "lyrics_id")
-    private Lyrics lyric;
+    // @ManyToOne
+    // @JoinColumn(name = "note_id")
+    // private Note note;
+
+
+    // @ManyToOne
+    // @JoinColumn(name = "lyrics_id")
+    // private Lyrics lyric;
 
     public AudioFile() {
     }
 
-    public AudioFile(String title, String artist, String genre, String audioUrl, UserRecording userRecording) {
-        this.title = title;
-        this.artist = artist;
-        this.genre = genre;
-        this.audioUrl = audioUrl;
-        this.userRecording = userRecording;
-    }
+    // public AudioFile(String title, String artist, String genre, String audioUrl, UserRecording userRecording) {
+    //     this.title = title;
+    //     this.artist = artist;
+    //     this.genre = genre;
+    //     this.audioUrl = audioUrl;
+    //     this.userRecording = userRecording;
+    // }
 
     // getters and setters
 
@@ -99,4 +104,15 @@ public class AudioFile {
     public void setUserRecording(UserRecording userRecording) {
         this.userRecording = userRecording;
     }
+
+     public Song getSong() {
+        return song;
+    }
+
+    public void setSong(Song song) {
+        this.song = song;
+    }
+
+
 }
+

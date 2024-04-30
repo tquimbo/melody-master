@@ -25,8 +25,10 @@ public class SongHistory {
     @Column(name = "played_at")
     private Date playedAt;
 
-    @Column(name = "score")
-    private Double score;
+    @OneToOne
+    @JoinColumn(name = "score_id")
+    private Score score;
+
 
     public SongHistory() {}
 
