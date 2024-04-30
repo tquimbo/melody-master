@@ -248,7 +248,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.melodymaster.melodymaster.repository.NoteRepository;
+import com.melodymaster.melodymaster.repository.SongRepository;
+import com.melodymaster.melodymaster.repository.AudioFileRepository;
+import com.melodymaster.melodymaster.repository.LyricsRepository;
+import com.melodymaster.melodymaster.entity.AudioFile;
+import com.melodymaster.melodymaster.entity.Lyrics;
 import com.melodymaster.melodymaster.entity.Note;
+import com.melodymaster.melodymaster.entity.Song;
 import com.melodymaster.melodymaster.dto.NoteDTO;
 import javax.sound.sampled.*;
 import java.io.*;
@@ -274,6 +280,13 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
     @Autowired
     private NoteRepository noteRepository;
 
+    @Autowired
+private SongRepository songRepository;
+@Autowired
+private AudioFileRepository audioFileRepository;
+@Autowired
+private LyricsRepository lyricsRepository;
+
     @Transactional
     @Override
     public void convertMp3ToWav(String sourcePath, String destPath) throws JavaLayerException {
@@ -283,24 +296,58 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
         logger.info("Conversion complete.");
     }
 
+    // @Transactional
+    // @Override
+    // public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
+    //     logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
+    //     List<Note> notes = analyzeFile(audioFile);
+    //     logger.info("File analysis complete, found {} notes.", notes.size());
+
+    //     if (!notes.isEmpty()) {
+    //         logger.info("Saving notes to database...");
+    //         noteRepository.saveAll(notes);
+    //         logger.info("Notes saved to database successfully.");
+    //     } else {
+    //         logger.warn("No notes found to save to database.");
+    //     }
+
+    //     List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
+    //     return noteDTOs;
+    // }
     @Transactional
-    @Override
-    public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
-        logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
-        List<Note> notes = analyzeFile(audioFile);
-        logger.info("File analysis complete, found {} notes.", notes.size());
+@Override
+public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
+    logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
+    List<Note> notes = analyzeFile(audioFile);
+    logger.info("File analysis complete, found {} notes.", notes.size());
 
-        if (!notes.isEmpty()) {
-            logger.info("Saving notes to database...");
-            noteRepository.saveAll(notes);
-            logger.info("Notes saved to database successfully.");
-        } else {
-            logger.warn("No notes found to save to database.");
-        }
+    // Assume song, lyrics, and audio file information are passed along with the audio file, possibly as metadata or additional form data.
+    // Here's a simplistic approach to handle updates or creation:
+    Song song = new Song();  // Or fetch from DB if it exists
+    AudioFile file = new AudioFile();  // Create a new audio file instance
+    Lyrics lyrics = new Lyrics();  // Create new lyrics instance
 
-        List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
-        return noteDTOs;
+    // Set properties for song, file, and lyrics from the received data
+    file.setSong(song);
+    song.setAudioFile(file);
+    song.setLyrics(lyrics);
+
+    // Persist changes
+    audioFileRepository.save(file);
+    lyricsRepository.save(lyrics);
+    songRepository.save(song);
+
+    if (!notes.isEmpty()) {
+        logger.info("Saving notes to database...");
+        noteRepository.saveAll(notes);
+        logger.info("Notes saved to database successfully.");
+    } else {
+        logger.warn("No notes found to save to database.");
     }
+
+    List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
+    return noteDTOs;
+}
 
     @Transactional
     @Override
