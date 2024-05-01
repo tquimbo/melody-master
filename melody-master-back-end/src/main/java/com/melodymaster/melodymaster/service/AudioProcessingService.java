@@ -34,6 +34,6 @@ public interface AudioProcessingService {
     List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes);
     Note toEntity(NoteDTO noteDTO);
     List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException;
-    void convertMp3ToWav(String sourcePath, String destPath) throws JavaLayerException;
+
     // Other methods
 }
