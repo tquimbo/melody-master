@@ -271,9 +271,15 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.converter.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
+@Transactional
 @Service
 public class AudioProcessingServiceImpl implements AudioProcessingService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private static final Logger logger = LoggerFactory.getLogger(AudioProcessingServiceImpl.class);
 
@@ -323,45 +329,73 @@ private LyricsRepository lyricsRepository;
     //     List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
     //     return noteDTOs;
     // }
+    @Transactional
     @Override
     public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
     logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
     List<Note> notes = analyzeFile(audioFile);
     logger.info("File analysis complete, found {} notes.", notes.size());
 
-    // Assume song, lyrics, and audio file information are passed along with the audio file, possibly as metadata or additional form data.
-    // Here's a simplistic approach to handle updates or creation:
-    // Song song = new Song();  // Or fetch from DB if it exists
+    
     AudioFile file = new AudioFile();  // Create a new audio file instance
     file.setNotes(notes);
     Lyrics lyrics = new Lyrics();  // Create new lyrics instance
 
-    // Set properties for song, file, and lyrics from the received data
-    // file.setSong(song);
-    // song.setAudioFile(file);
-    // song.setLyrics(lyrics);
-
     // Persist changes
-    audioFileRepository.save(file);
-    lyricsRepository.save(lyrics);
-    // songRepository.save(song);
+        audioFileRepository.save(file);
+        lyricsRepository.save(lyrics);
+        noteRepository.saveAll(notes);
 
+ 
+
+    // Manually flushing and committing
+        entityManager.flush();  // Force flush to DB
+        entityManager.clear();  // Clear the persistence context to avoid any cache effects
+     logger.info("Transaction committed successfully.");
 
     // // logger.debug("Saving song: {}", song);
     //     songRepository.save(song);
     //     // logger.debug("Song saved successfully.");
 
-    if (!notes.isEmpty()) {
-        logger.info("Saving notes to database...");
-        noteRepository.saveAll(notes);
-        logger.info("Notes saved to database successfully.");
-    } else {
-        logger.warn("No notes found to save to database.");
-    }
+    // if (!notes.isEmpty()) {
+    //     logger.info("Saving notes to database...");
+    //     noteRepository.saveAll(notes);
+    //     logger.info("Notes saved to database successfully.");
+    // } else {
+    //     logger.warn("No notes found to save to database.");
+    // }
 
     List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
     return noteDTOs;
 }
+
+// @Transactional
+//  @Override
+// public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
+//     try {
+//         List<Note> notes = new ArrayList<>(); // Declare the variable 'notes'
+//         AudioFile file = new AudioFile();  // Create a new audio file instance
+//         file.setNotes(notes);
+//         Lyrics lyrics = new Lyrics();  // Create new lyrics instance
+
+//         // Persist changes
+//         audioFileRepository.save(file);
+//         lyricsRepository.save(lyrics);
+//         noteRepository.saveAll(notes);
+
+//         // Manually flushing and committing
+//         entityManager.flush();  // Force flush to DB
+//         entityManager.clear();  // Clear the persistence context to avoid any cache effects
+
+//         logger.info("Transaction committed successfully.");
+//     } catch (Exception ex) {
+//         entityManager.getTransaction().rollback();
+//         logger.error("Transaction rolled back due to an error: {}", ex.getMessage());
+//         throw ex;  // Rethrow the exception to ensure it's handled further up the stack
+//     }
+//     List<Note> notes = new ArrayList<>(); // Declare and initialize the variable 'notes'
+//     return convertNotesToNoteDTOs(notes);
+// }
 
     @Transactional
     @Override

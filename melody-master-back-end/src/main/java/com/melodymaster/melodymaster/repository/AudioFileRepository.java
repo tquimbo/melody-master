@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.melodymaster.melodymaster.entity.AudioFile;
 
 @Repository
-public interface AudioFileRepository extends CrudRepository<AudioFile, Long> {
+public interface AudioFileRepository extends JpaRepository<AudioFile, Long> {
 }
