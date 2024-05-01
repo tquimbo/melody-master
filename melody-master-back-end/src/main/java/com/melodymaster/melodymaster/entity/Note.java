@@ -21,9 +21,12 @@ public class Note {
     @Column(name = "duration")
     private Double duration;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "audio_file_id")
-    private AudioFile audioFile;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "audio_file_id")
+    // private AudioFile audioFile;
+    @ManyToOne
+    @JoinColumn(name = "audio_file_id") // Adjust the column name as necessary
+    private AudioFile audio_file;
     
     // @OneToOne(fetch = FetchType.LAZY)
     // private String lyrics;
@@ -105,6 +108,14 @@ public class Note {
     
     public void setLyrics(String lyrics) {
         this.lyrics = lyrics;
+    }
+
+      public AudioFile getAudioFile() {
+        return audio_file;
+    }
+
+    public void setAudioFile(AudioFile audio_file) {
+        this.audio_file = audio_file;
     }
 
     public Song getSong() {

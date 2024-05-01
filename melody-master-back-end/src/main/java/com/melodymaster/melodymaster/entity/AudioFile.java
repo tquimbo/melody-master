@@ -1,5 +1,7 @@
 package com.melodymaster.melodymaster.entity;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -110,13 +112,22 @@ public class AudioFile {
         this.userRecording = userRecording;
     }
 
-    public Song getSong() {
-        return song;
+    public List<Note> getNotes() {
+        return notes;
     }
 
-    public void setSong(Song song) {
-        this.song = song;
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
+
+
+    // public Song getSong() {
+    //     return song;
+    // }
+
+    // public void setSong(Song song) {
+    //     this.song = song;
+    // }
 
 
 }
