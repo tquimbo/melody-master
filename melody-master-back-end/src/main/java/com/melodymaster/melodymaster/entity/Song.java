@@ -43,6 +43,7 @@ public class Song {
     // @JoinColumn(name = "lyrics_id")
     // private Lyrics lyric;
 
+    // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "audio_file_id")
     private AudioFile audioFile;

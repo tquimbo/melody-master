@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.melodymaster.melodymaster.entity.Song;
 
 @Repository
-public interface SongRepository extends JpaRepository<Song, Long> {
+public interface SongRepository extends CrudRepository<Song, Long> {
 }
