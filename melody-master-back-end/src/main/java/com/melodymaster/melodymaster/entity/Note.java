@@ -29,7 +29,10 @@ public class Note {
     // @JoinColumn(name = "song_id")
     // private Song song;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    // @OneToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "song_id")
+    // private Song song;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "song_id")
     private Song song;
 

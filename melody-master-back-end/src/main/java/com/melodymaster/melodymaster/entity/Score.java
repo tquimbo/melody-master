@@ -1,11 +1,6 @@
 package com.melodymaster.melodymaster.entity;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "scores")
@@ -18,8 +13,12 @@ public class Score {
     @Column(name = "user_recording_id")
     private int userRecordingId;
     
-    @Column(name = "song_id")
-    private int songId;
+    // @Column(name = "song_id")
+    // private int songId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "song_id")
+    private Song song;
+
     
     @Column(name = "accuracy_score")
     private double accuracyScore;
@@ -32,13 +31,15 @@ public class Score {
     
     public Score() {}
     
-    public Score(int userRecordingId, int songId, double accuracyScore, double timingScore) {
-        this.userRecordingId = userRecordingId;
-        this.songId = songId;
-        this.accuracyScore = accuracyScore;
-        this.timingScore = timingScore;
-        this.totalScore = (accuracyScore + timingScore) / 2; // Calculate total score as average of accuracy and timing scores
-    }
+    // private int songId;
+    
+    // public Score(int userRecordingId, int songId, double accuracyScore, double timingScore) {
+    //     this.userRecordingId = userRecordingId;
+    //     this.songId = songId;
+    //     this.accuracyScore = accuracyScore;
+    //     this.timingScore = timingScore;
+    //     this.totalScore = (accuracyScore + timingScore) / 2; // Calculate total score as average of accuracy and timing scores
+    // }
     
     // Getters
     public int getId() {
@@ -49,8 +50,8 @@ public class Score {
         return userRecordingId;
     }
     
-    public int getSongId() {
-        return songId;
+    public Song getSong() {
+        return song;
     }
     
     public double getAccuracyScore() {
@@ -74,8 +75,12 @@ public class Score {
         this.userRecordingId = userRecordingId;
     }
     
-    public void setSongId(int songId) {
-        this.songId = songId;
+    // public void setSongId(int song_id) {
+    //     this.song_id = song_id;
+    // }
+
+    public void setSong(Song song) {
+        this.song = song;
     }
     
     public void setAccuracyScore(double accuracyScore) {

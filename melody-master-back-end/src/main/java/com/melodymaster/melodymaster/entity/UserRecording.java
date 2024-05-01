@@ -22,6 +22,9 @@ public class UserRecording {
     @JoinColumn(name = "user_id")
     private User user;
     
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "song_id")
+    // private Song song;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "song_id")
     private Song song;

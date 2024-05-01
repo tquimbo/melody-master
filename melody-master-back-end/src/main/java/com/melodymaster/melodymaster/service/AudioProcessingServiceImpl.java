@@ -280,8 +280,9 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
     @Autowired
     private NoteRepository noteRepository;
 
-    @Autowired
+@Autowired
 private SongRepository songRepository;
+
 @Autowired
 private AudioFileRepository audioFileRepository;
 @Autowired
@@ -314,9 +315,8 @@ private LyricsRepository lyricsRepository;
     //     List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
     //     return noteDTOs;
     // }
-    @Transactional
-@Override
-public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
+    @Override
+    public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
     logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
     List<Note> notes = analyzeFile(audioFile);
     logger.info("File analysis complete, found {} notes.", notes.size());
@@ -550,3 +550,5 @@ public Note toEntity(NoteDTO noteDTO) {
 //         return note;
 //     }
 // }
+
+
