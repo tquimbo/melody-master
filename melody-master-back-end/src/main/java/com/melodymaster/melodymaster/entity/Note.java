@@ -21,6 +21,9 @@ public class Note {
     @Column(name = "duration")
     private Double duration;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "audio_file_id")
+    private AudioFile audioFile;
     
     // @OneToOne(fetch = FetchType.LAZY)
     // private String lyrics;

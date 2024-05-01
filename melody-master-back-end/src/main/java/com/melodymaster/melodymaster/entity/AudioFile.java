@@ -10,9 +10,12 @@ public class AudioFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "song_id")
-    private Song song;
+    // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // @JoinColumn(name = "song_id")
+    // private Song song;
+
+    @OneToMany(mappedBy = "audio_file", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Note> notes;
 
     @Column(name = "title")
     private String title;

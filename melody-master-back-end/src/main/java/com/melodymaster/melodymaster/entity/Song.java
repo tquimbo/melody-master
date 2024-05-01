@@ -14,7 +14,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 
 @Entity
-@Table(name = "songs")
+@Table(name = "SONGS")
 public class Song {
     
     @Id

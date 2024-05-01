@@ -280,13 +280,21 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
     @Autowired
     private NoteRepository noteRepository;
 
-@Autowired
-private SongRepository songRepository;
+// @Autowired
+// private SongRepository songRepository;
 
 @Autowired
 private AudioFileRepository audioFileRepository;
 @Autowired
 private LyricsRepository lyricsRepository;
+
+//  public void saveSong(Song song) {
+//         logger.debug("Saving song: {}", song);
+//         songRepository.save(song);
+//         logger.debug("Song saved successfully.");
+//     }
+
+
 
     @Transactional
     @Override
@@ -323,19 +331,25 @@ private LyricsRepository lyricsRepository;
 
     // Assume song, lyrics, and audio file information are passed along with the audio file, possibly as metadata or additional form data.
     // Here's a simplistic approach to handle updates or creation:
-    Song song = new Song();  // Or fetch from DB if it exists
+    // Song song = new Song();  // Or fetch from DB if it exists
     AudioFile file = new AudioFile();  // Create a new audio file instance
+    file.setNotes(notes);
     Lyrics lyrics = new Lyrics();  // Create new lyrics instance
 
     // Set properties for song, file, and lyrics from the received data
-    file.setSong(song);
-    song.setAudioFile(file);
-    song.setLyrics(lyrics);
+    // file.setSong(song);
+    // song.setAudioFile(file);
+    // song.setLyrics(lyrics);
 
     // Persist changes
     audioFileRepository.save(file);
     lyricsRepository.save(lyrics);
-    songRepository.save(song);
+    // songRepository.save(song);
+
+
+    // // logger.debug("Saving song: {}", song);
+    //     songRepository.save(song);
+    //     // logger.debug("Song saved successfully.");
 
     if (!notes.isEmpty()) {
         logger.info("Saving notes to database...");
