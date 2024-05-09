@@ -34,6 +34,7 @@ public interface AudioProcessingService {
     List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes);
     Note toEntity(NoteDTO noteDTO);
     List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException;
+    
 
     // Other methods
 }

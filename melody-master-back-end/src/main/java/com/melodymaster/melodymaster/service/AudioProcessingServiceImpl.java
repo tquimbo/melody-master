@@ -62,55 +62,110 @@ private LyricsRepository lyricsRepository;
     // }
 
     
-    @Transactional
-    @Override
-    public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
+
+@Transactional
+@Override
+public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
     logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
     List<Note> notes = analyzeFile(audioFile);
     logger.info("File analysis complete, found {} notes.", notes.size());
 
-    
     AudioFile file = new AudioFile();
-    file.setTitle(audioFile.getOriginalFilename());   // Create a new audio file instance
+    file.setTitle(audioFile.getOriginalFilename()); // Setting the title from the original file name
     file.setNotes(notes);
-    Lyrics lyrics = new Lyrics();  // Create new lyrics instance
+    Lyrics lyrics = new Lyrics(); // Creating new lyrics instance
+
+    logger.info("AudioFile details before saving: {}", file);
+    logger.info("Lyrics details before saving: {}", lyrics);
+    logger.info("Notes details before saving: {}", notes);
 
     // Persist changes
-        audioFileRepository.save(file);
-        lyricsRepository.save(lyrics);
-        // noteRepository.saveAll(notes);
+    audioFileRepository.save(file);
+    lyricsRepository.save(lyrics);
 
     if (!notes.isEmpty()) {
-        logger.info("Saving notes to database...");
         noteRepository.saveAll(notes);
+        logger.info("Saving notes to database...");
         logger.info("Notes saved to database successfully.");
     } else {
         logger.warn("No notes found to save to database.");
     }
 
+    // Verifying the saved data
+    AudioFile savedFile = audioFileRepository.findById(file.getId()).orElse(null);
+    Lyrics savedLyrics = lyricsRepository.findById(lyrics.getId()).orElse(null);
 
- 
+    logger.info("Saved AudioFile details: {}", savedFile);
+    logger.info("Saved Lyrics details: {}", savedLyrics);
 
-    // Manually flushing and committing
-        entityManager.flush();  // Force flush to DB
-        entityManager.clear();  // Clear the persistence context to avoid any cache effects
-     logger.info("Transaction committed successfully.");
-
-    // // logger.debug("Saving song: {}", song);
-    //     songRepository.save(song);
-    //     // logger.debug("Song saved successfully.");
-
-    // if (!notes.isEmpty()) {
-    //     logger.info("Saving notes to database...");
-    //     noteRepository.saveAll(notes);
-    //     logger.info("Notes saved to database successfully.");
-    // } else {
-    //     logger.warn("No notes found to save to database.");
-    // }
+       // Manually check database content
+       List<AudioFile> files = audioFileRepository.findAll();
+       logger.info("Manual check - Number of AudioFiles in database: {}", files.size());
+   
+       // Check notes count directly from the database
+       long notesCount = noteRepository.count();
+       logger.info("Manual check - Number of notes in database: {}", notesCount);
 
     List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
     return noteDTOs;
 }
+
+//     @Transactional
+//     @Override
+//     public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
+//     logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
+//     List<Note> notes = analyzeFile(audioFile);
+//     logger.info("File analysis complete, found {} notes.", notes.size());
+
+    
+//     AudioFile file = new AudioFile();
+//     file.setTitle(audioFile.getOriginalFilename());   // Create a new audio file instance
+//     file.setNotes(notes);
+//     Lyrics lyrics = new Lyrics();  // Create new lyrics instance
+
+
+//     if (!notes.isEmpty()) {
+//         logger.info("Saving notes to database...");
+//         noteRepository.saveAll(notes);
+//         logger.info("Notes saved to database successfully.");
+//     } else {
+//         logger.warn("No notes found to save to database.");
+//     }
+
+
+//     // Persist changes
+//         audioFileRepository.save(file);
+//         lyricsRepository.save(lyrics);
+//         // noteRepository.saveAll(notes);
+
+
+ 
+
+//     // Manually flushing and committing
+//         entityManager.flush();  // Force flush to DB
+//         entityManager.clear();  // Clear the persistence context to avoid any cache effects
+//      logger.info("Transaction committed successfully.");
+
+//     // // logger.debug("Saving song: {}", song);
+//     //     songRepository.save(song);
+//     //     // logger.debug("Song saved successfully.");
+
+//     // if (!notes.isEmpty()) {
+//     //     logger.info("Saving notes to database...");
+//     //     noteRepository.saveAll(notes);
+//     //     logger.info("Notes saved to database successfully.");
+//     // } else {
+//     //     logger.warn("No notes found to save to database.");
+//     // }
+//     boolean isFileSaved = audioFileRepository.findById(file.getId()).isPresent();
+//     boolean areNotesSaved = noteRepository.count() == notes.size();  // Assuming no other notes are being added concurrently
+//     logger.info("Verification: Audio file saved? {}", isFileSaved);
+//     logger.info("Verification: All notes saved? {}", areNotesSaved);
+
+
+//     List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
+//     return noteDTOs;
+// }
 
 // @Transactional
 //  @Override
