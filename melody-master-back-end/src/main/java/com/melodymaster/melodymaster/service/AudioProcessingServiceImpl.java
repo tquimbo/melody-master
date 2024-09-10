@@ -121,14 +121,40 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
         return notes;
     }
 
+
+@Transactional
+@Override
+public Note toEntity(NoteDTO noteDTO) {
+   Note note = new Note();
+   note.setPitch(noteDTO.getPitch());
+   note.setDuration(noteDTO.getDuration());
+   note.setLyrics(noteDTO.getLyrics());
+   note.setStartTime(noteDTO.getStartTime());
+   note.setEndTime(noteDTO.getEndTime());
+
+
+   Double duration = note.getDuration();
+   if (duration != null) {
+       double durationValue = duration.doubleValue();
+       // use durationValue
+   } else {
+       // handle the case where duration is null
+   }
+
+   logger.info("Converted DTO to entity: Pitch = {}, Duration = {}", note.getPitch(), note.getDuration());
+   return note;
+}
+
     @Transactional
     @Override
     public List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
         logger.info("Converting notes to DTOs...");
+
         List<NoteDTO> dtos = notes.stream()
-                                  .map(note -> new NoteDTO(note.getPitch(), note.getDuration(), 0, note.getLyrics()))
-                                  .collect(Collectors.toList());
+        .map(note -> new NoteDTO(note.getPitch(), note.getStartTime(), note.getEndTime(), note.getLyrics(), note.getDuration(), null))
+        .collect(Collectors.toList());
         logger.info("Conversion to DTOs complete. Total DTOs created: {}", dtos.size());
+
         return dtos;
     }
 }
@@ -407,7 +433,7 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
     //     logger.info("Converted DTO to entity: Pitch = {}, Duration = {}", note.getPitch(), note.getDuration());
     //     return note;
     // }
-}
+
 
 
     // handle the case where duration is null

@@ -19,7 +19,6 @@ public class MelodyMasterApplication {
     public static void main(String[] args) {
         LOGGER.info("Starting MelodyMasterApplication...");
         SpringApplication.run(MelodyMasterApplication.class, args);
-        
     }
 
 }
