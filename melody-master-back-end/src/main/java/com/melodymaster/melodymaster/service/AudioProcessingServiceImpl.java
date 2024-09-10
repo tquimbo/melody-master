@@ -1,36 +1,35 @@
-
 package com.melodymaster.melodymaster.service;
 
+import org.apache.tika.Tika;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import com.melodymaster.melodymaster.repository.NoteRepository;
-// import com.melodymaster.melodymaster.repository.SongRepository;
-import com.melodymaster.melodymaster.repository.AudioFileRepository;
-import com.melodymaster.melodymaster.repository.LyricsRepository;
+
+import com.melodymaster.melodymaster.dto.NoteDTO;
 import com.melodymaster.melodymaster.entity.AudioFile;
 import com.melodymaster.melodymaster.entity.Lyrics;
 import com.melodymaster.melodymaster.entity.Note;
-import com.melodymaster.melodymaster.entity.Song;
-import com.melodymaster.melodymaster.dto.NoteDTO;
+import com.melodymaster.melodymaster.repository.AudioFileRepository;
+import com.melodymaster.melodymaster.repository.LyricsRepository;
+import com.melodymaster.melodymaster.repository.NoteRepository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sound.sampled.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.AudioEvent;
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.converter.Converter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Transactional
 @Service
@@ -44,13 +43,95 @@ public class AudioProcessingServiceImpl implements AudioProcessingService {
     @Autowired
     private NoteRepository noteRepository;
 
+    @Autowired
+    private AudioFileRepository audioFileRepository;
 
-@Autowired
-private AudioFileRepository audioFileRepository;
-@Autowired
-private LyricsRepository lyricsRepository;
+    @Autowired
+    private LyricsRepository lyricsRepository;
 
+    private final Tika tika = new Tika(); // Apache Tika to detect the file format
 
+    @Transactional
+    @Override
+    public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
+        logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
+
+        // Detect the file type
+        String mimeType = tika.detect(audioFile.getInputStream());
+        logger.info("Detected MIME type: {}", mimeType);
+
+        // Handle file processing based on MIME type
+        List<Note> notes;
+        if (mimeType.startsWith("audio/")) {
+            notes = analyzeFile(audioFile);
+        } else {
+            throw new UnsupportedAudioFileException("Unsupported file format: " + mimeType);
+        }
+
+        logger.info("File analysis complete, found {} notes.", notes.size());
+
+        // Save the audio file and notes
+        AudioFile file = new AudioFile();
+        file.setTitle(audioFile.getOriginalFilename());
+        file.setNotes(notes);
+
+        Lyrics lyrics = new Lyrics(); // Creating new lyrics instance
+
+        // Persist the changes
+        audioFileRepository.save(file);
+        lyricsRepository.save(lyrics);
+
+        if (!notes.isEmpty()) {
+            noteRepository.saveAll(notes);
+        }
+
+        List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
+        return noteDTOs;
+    }
+
+    @Transactional
+    @Override
+    public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException {
+        logger.info("Analyzing audio file...");
+
+        List<Note> notes = new ArrayList<>();
+        InputStream inputStream = new BufferedInputStream(audioFile.getInputStream());
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);
+        AudioFormat format = audioInputStream.getFormat();
+        int sampleRate = (int) format.getSampleRate();
+        byte[] audioBytes = audioInputStream.readAllBytes();
+
+        logger.info("Audio stream read with sample rate: {}", sampleRate);
+
+        PitchDetectionHandler pitchDetectionHandler = (pitchDetectionResult, audioEvent) -> {
+            if (pitchDetectionResult.getPitch() > 0) {
+                Note note = new Note();
+                note.setPitch(pitchDetectionResult.getPitch());
+                note.setStartTime(audioEvent.getTimeStamp() - (double) audioEvent.getBufferSize() / audioEvent.getSampleRate());
+                note.setEndTime(audioEvent.getTimeStamp());
+                notes.add(note);
+            }
+        };
+
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromByteArray(audioBytes, format, 1024, 0);
+        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, 1024, pitchDetectionHandler));
+        dispatcher.run();
+
+        logger.info("Audio processing completed. Total notes detected: {}", notes.size());
+        return notes;
+    }
+
+    @Transactional
+    @Override
+    public List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
+        logger.info("Converting notes to DTOs...");
+        List<NoteDTO> dtos = notes.stream()
+                                  .map(note -> new NoteDTO(note.getPitch(), note.getDuration(), 0, note.getLyrics()))
+                                  .collect(Collectors.toList());
+        logger.info("Conversion to DTOs complete. Total DTOs created: {}", dtos.size());
+        return dtos;
+    }
+}
 
     // @Transactional
     // @Override
@@ -63,52 +144,52 @@ private LyricsRepository lyricsRepository;
 
     
 
-@Transactional
-@Override
-public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
-    logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
-    List<Note> notes = analyzeFile(audioFile);
-    logger.info("File analysis complete, found {} notes.", notes.size());
+// @Transactional
+// @Override
+// public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, UnsupportedAudioFileException {
+//     logger.info("Starting file analysis for {}", audioFile.getOriginalFilename());
+//     List<Note> notes = analyzeFile(audioFile);
+//     logger.info("File analysis complete, found {} notes.", notes.size());
 
-    AudioFile file = new AudioFile();
-    file.setTitle(audioFile.getOriginalFilename()); // Setting the title from the original file name
-    file.setNotes(notes);
-    Lyrics lyrics = new Lyrics(); // Creating new lyrics instance
+//     AudioFile file = new AudioFile();
+//     file.setTitle(audioFile.getOriginalFilename()); // Setting the title from the original file name
+//     file.setNotes(notes);
+//     Lyrics lyrics = new Lyrics(); // Creating new lyrics instance
 
-    logger.info("AudioFile details before saving: {}", file);
-    logger.info("Lyrics details before saving: {}", lyrics);
-    logger.info("Notes details before saving: {}", notes);
+//     logger.info("AudioFile details before saving: {}", file);
+//     logger.info("Lyrics details before saving: {}", lyrics);
+//     logger.info("Notes details before saving: {}", notes);
 
-    // Persist changes
-    audioFileRepository.save(file);
-    lyricsRepository.save(lyrics);
+//     // Persist changes
+//     audioFileRepository.save(file);
+//     lyricsRepository.save(lyrics);
 
-    if (!notes.isEmpty()) {
-        noteRepository.saveAll(notes);
-        logger.info("Saving notes to database...");
-        logger.info("Notes saved to database successfully.");
-    } else {
-        logger.warn("No notes found to save to database.");
-    }
+//     if (!notes.isEmpty()) {
+//         noteRepository.saveAll(notes);
+//         logger.info("Saving notes to database...");
+//         logger.info("Notes saved to database successfully.");
+//     } else {
+//         logger.warn("No notes found to save to database.");
+//     }
 
-    // Verifying the saved data
-    AudioFile savedFile = audioFileRepository.findById(file.getId()).orElse(null);
-    Lyrics savedLyrics = lyricsRepository.findById(lyrics.getId()).orElse(null);
+//     // Verifying the saved data
+//     AudioFile savedFile = audioFileRepository.findById(file.getId()).orElse(null);
+//     Lyrics savedLyrics = lyricsRepository.findById(lyrics.getId()).orElse(null);
 
-    logger.info("Saved AudioFile details: {}", savedFile);
-    logger.info("Saved Lyrics details: {}", savedLyrics);
+//     logger.info("Saved AudioFile details: {}", savedFile);
+//     logger.info("Saved Lyrics details: {}", savedLyrics);
 
-       // Manually check database content
-       List<AudioFile> files = audioFileRepository.findAll();
-       logger.info("Manual check - Number of AudioFiles in database: {}", files.size());
+//        // Manually check database content
+//        List<AudioFile> files = audioFileRepository.findAll();
+//        logger.info("Manual check - Number of AudioFiles in database: {}", files.size());
    
-       // Check notes count directly from the database
-       long notesCount = noteRepository.count();
-       logger.info("Manual check - Number of notes in database: {}", notesCount);
+//        // Check notes count directly from the database
+//        long notesCount = noteRepository.count();
+//        logger.info("Manual check - Number of notes in database: {}", notesCount);
 
-    List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
-    return noteDTOs;
-}
+//     List<NoteDTO> noteDTOs = convertNotesToNoteDTOs(notes);
+//     return noteDTOs;
+// }
 
 //     @Transactional
 //     @Override
@@ -195,44 +276,44 @@ public List<NoteDTO> saveFile(MultipartFile audioFile) throws IOException, Unsup
 //     return convertNotesToNoteDTOs(notes);
 // }
 
-@Transactional
-@Override
-public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException {
-    Logger logger = LoggerFactory.getLogger(AudioProcessingServiceImpl.class);
-    logger.info("Analyzing audio file...");
+// @Transactional
+// @Override
+// public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFileException, IOException {
+//     Logger logger = LoggerFactory.getLogger(AudioProcessingServiceImpl.class);
+//     logger.info("Analyzing audio file...");
 
-    List<Note> notes = new ArrayList<>();
-    InputStream inputStream = new BufferedInputStream(audioFile.getInputStream());
-    AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);
-    AudioFormat format = audioInputStream.getFormat();
-    int sampleRate = (int) format.getSampleRate();
-    byte[] audioBytes = audioInputStream.readAllBytes();
+//     List<Note> notes = new ArrayList<>();
+//     InputStream inputStream = new BufferedInputStream(audioFile.getInputStream());
+//     AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);
+//     AudioFormat format = audioInputStream.getFormat();
+//     int sampleRate = (int) format.getSampleRate();
+//     byte[] audioBytes = audioInputStream.readAllBytes();
 
-    logger.info("Audio stream read with sample rate: {}", sampleRate);
+//     logger.info("Audio stream read with sample rate: {}", sampleRate);
 
-    PitchDetectionHandler pitchDetectionHandler = (pitchDetectionResult, audioEvent) -> {
-        if (pitchDetectionResult.getPitch() > 0) {
-            Note note = new Note();
-            note.setPitch(pitchDetectionResult.getPitch());
-            note.setStartTime(audioEvent.getTimeStamp() - (double) audioEvent.getBufferSize() / audioEvent.getSampleRate());
-            note.setEndTime(audioEvent.getTimeStamp());
+//     PitchDetectionHandler pitchDetectionHandler = (pitchDetectionResult, audioEvent) -> {
+//         if (pitchDetectionResult.getPitch() > 0) {
+//             Note note = new Note();
+//             note.setPitch(pitchDetectionResult.getPitch());
+//             note.setStartTime(audioEvent.getTimeStamp() - (double) audioEvent.getBufferSize() / audioEvent.getSampleRate());
+//             note.setEndTime(audioEvent.getTimeStamp());
 
-            notes.add(note);
+//             notes.add(note);
 
             // Detailed logging for each note
-            logger.debug("Detected note: Pitch = {}, Start Time = {}, End Time = {}",
-                         pitchDetectionResult.getPitch(), note.getStartTime(), note.getEndTime());
-        }
-    };
+//             logger.debug("Detected note: Pitch = {}, Start Time = {}, End Time = {}",
+//                          pitchDetectionResult.getPitch(), note.getStartTime(), note.getEndTime());
+//         }
+//     };
 
-    AudioDispatcher dispatcher = AudioDispatcherFactory.fromByteArray(audioBytes, format, 1024, 0);
-    dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, 1024, pitchDetectionHandler));
-    dispatcher.run();
+//     AudioDispatcher dispatcher = AudioDispatcherFactory.fromByteArray(audioBytes, format, 1024, 0);
+//     dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, 1024, pitchDetectionHandler));
+//     dispatcher.run();
 
-    logger.info("Audio processing completed. Total notes detected: {}", notes.size());
+//     logger.info("Audio processing completed. Total notes detected: {}", notes.size());
 
-    return notes;
-}
+//     return notes;
+// }
 
     // @Transactional
     // @Override
@@ -276,44 +357,44 @@ public List<Note> analyzeFile(MultipartFile audioFile) throws UnsupportedAudioFi
     //     return dtos;
     // }
 
-    @Override
-    @Transactional
-public List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
-    logger.info("Converting notes to DTOs...");
-    List<NoteDTO> dtos = notes.stream()
-                              .map(note -> {
-                                  Double duration = note.getDuration();
-                                  if (duration == null) {
-                                      // handle the case where duration is null
-                                      // for example, you can set a default value
-                                      duration = 0.0;
-                                  }
-                                  return new NoteDTO(note.getPitch(), duration, 0, note.getLyrics(), duration, null);
-                              })
-                              .collect(Collectors.toList());
-    logger.info("Conversion to DTOs complete. Total DTOs created: {}", dtos.size());
-    return dtos;
-}
+//     @Override
+//     @Transactional
+// public List<NoteDTO> convertNotesToNoteDTOs(List<Note> notes) {
+//     logger.info("Converting notes to DTOs...");
+//     List<NoteDTO> dtos = notes.stream()
+//                               .map(note -> {
+//                                   Double duration = note.getDuration();
+//                                   if (duration == null) {
+//                                       // handle the case where duration is null
+//                                       // for example, you can set a default value
+//                                       duration = 0.0;
+//                                   }
+//                                   return new NoteDTO(note.getPitch(), duration, 0, note.getLyrics(), duration, null);
+//                               })
+//                               .collect(Collectors.toList());
+//     logger.info("Conversion to DTOs complete. Total DTOs created: {}", dtos.size());
+//     return dtos;
+// }
 
-@Transactional
- @Override
-public Note toEntity(NoteDTO noteDTO) {
-    Note note = new Note();
-    note.setPitch(noteDTO.getPitch());
-    note.setDuration(noteDTO.getDuration());
-    note.setLyrics(noteDTO.getLyrics());
+// @Transactional
+//  @Override
+// public Note toEntity(NoteDTO noteDTO) {
+//     Note note = new Note();
+//     note.setPitch(noteDTO.getPitch());
+//     note.setDuration(noteDTO.getDuration());
+//     note.setLyrics(noteDTO.getLyrics());
 
-    Double duration = note.getDuration();
-    if (duration != null) {
-        double durationValue = duration.doubleValue();
-        // use durationValue
-    } else {
-        // handle the case where duration is null
-    }
+//     Double duration = note.getDuration();
+//     if (duration != null) {
+//         double durationValue = duration.doubleValue();
+//         // use durationValue
+//     } else {
+//         // handle the case where duration is null
+//     }
 
-    logger.info("Converted DTO to entity: Pitch = {}, Duration = {}", note.getPitch(), note.getDuration());
-    return note;
-}
+//     logger.info("Converted DTO to entity: Pitch = {}, Duration = {}", note.getPitch(), note.getDuration());
+//     return note;
+// }
 
 
 

@@ -144,6 +144,30 @@
             <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
 
+            <!-- Apache Tika for MIME type detection -->
+    <dependency>
+        <groupId>org.apache.tika</groupId>
+        <artifactId>tika-core</artifactId>
+        <version>1.28</version>
+    </dependency>
+
+    <!-- Additional audio format libraries -->
+    <dependency>
+        <groupId>com.googlecode.soundlibs</groupId>
+        <artifactId>mp3spi</artifactId>
+        <version>1.9.5-1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.googlecode.soundlibs</groupId>
+        <artifactId>vorbisspi</artifactId>
+        <version>1.0.3-1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.googlecode.soundlibs</groupId>
+        <artifactId>jflac</artifactId>
+        <version>1.3.0-1</version>
+    </dependency>
+
         <!-- Sound library (needs special handling or replacement) -->
         <!-- This dependency might need a repository declaration -->
         <!-- If not found, consider replacing with an available alternative -->
