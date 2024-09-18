@@ -78,12 +78,7 @@ public class AudioAPI {
     public ResponseEntity<?> getUploadPage() {
         logger.info("Accessing the audio upload page.");
         return ResponseEntity.ok().body("This is the audio upload page.");
-
-        @GetMapping("/upload")
-public ResponseEntity<?> getUploadPage() {
-    logger.info("Accessing the audio upload page.");
-    return ResponseEntity.ok("This is the audio upload page.");
-}
+    }
 
 @PostMapping("/upload")
 public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
@@ -155,4 +150,3 @@ public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFi
     //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
     //     }
     // }
-}
