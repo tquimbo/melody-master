@@ -72,28 +72,71 @@ public class AudioAPI {
         this.audioProcessingService = audioProcessingServiceImpl;
     }
 
+    
+
     @GetMapping("/upload")
     public ResponseEntity<?> getUploadPage() {
         logger.info("Accessing the audio upload page.");
         return ResponseEntity.ok().body("This is the audio upload page.");
-    }
 
-    @PostMapping("/upload")
+        @GetMapping("/upload")
+public ResponseEntity<?> getUploadPage() {
+    logger.info("Accessing the audio upload page.");
+    return ResponseEntity.ok("This is the audio upload page.");
+}
+
+@PostMapping("/upload")
 public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
     logger.info("Received audio file: {}", audioFile.getOriginalFilename());
+    
+    // Validate the incoming file
+    if (audioFile.isEmpty()) {
+        logger.warn("Received empty audio file.");
+        return ResponseEntity.badRequest().body("No file received.");
+    }
+    
     try {
         logger.debug("Starting to process the audio file.");
+        
+        // Process the file
         List<NoteDTO> noteDTOs = audioProcessingService.saveFile(audioFile);
+        
         logger.info("Audio file processed successfully with {} notes", noteDTOs.size());
-        return ResponseEntity.ok().body("Audio processed successfully: " + noteDTOs.size() + " notes processed.");
-    } catch (UnsupportedAudioFileException | IOException e) {
-        logger.error("Error processing audio file", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
+        return ResponseEntity.ok("Audio processed successfully: " + noteDTOs.size() + " notes processed.");
+        
+    } catch (UnsupportedAudioFileException e) {
+        logger.error("Unsupported audio file format: {}", audioFile.getOriginalFilename(), e);
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                             .body("Unsupported audio format: " + e.getMessage());
+    } catch (IOException e) {
+        logger.error("I/O error while processing audio file: {}", audioFile.getOriginalFilename(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body("I/O error processing audio: " + e.getMessage());
     } catch (Exception e) {
-        logger.error("Unexpected error during audio processing", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error: " + e.getMessage());
+        logger.error("Unexpected error during audio processing: {}", audioFile.getOriginalFilename(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body("Unexpected error: " + e.getMessage());
     }
 }
+    }
+
+//     @PostMapping("/upload")
+// public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
+//     logger.info("Received audio file: {}", audioFile.getOriginalFilename());
+//     logger.debug("Received file: {}", file.getOriginalFilename());
+//     try {
+//         logger.debug("Starting to process the audio file.");
+//         List<NoteDTO> noteDTOs = audioProcessingService.saveFile(audioFile);
+//         logger.info("Audio file processed successfully with {} notes", noteDTOs.size());
+//         return ResponseEntity.ok().body("Audio processed successfully: " + noteDTOs.size() + " notes processed.");
+//     } catch (UnsupportedAudioFileException | IOException e) {
+//         logger.error("Error processing audio file", e);
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing audio: " + e.getMessage());
+//     } catch (Exception e) {
+//         logger.error("Unexpected error during audio processing", e);
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error: " + e.getMessage());
+//     }
+// }
     // public ResponseEntity<?> uploadAudio(@RequestParam("file") MultipartFile audioFile) {
     //     logger.info("Received audio file: {}", audioFile.getOriginalFilename());
     //     try {
